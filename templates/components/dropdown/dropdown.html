@@ -1,0 +1,31 @@
+<div class="dropdown">
+    <div 
+        class="form-control d-flex align-items-center w-100 {% if limit == tags|length %}bg-secondary-subtle{% endif %}"
+        {% if limit > tags|length %}
+        data-bs-toggle="dropdown" 
+        aria-expanded="false"
+        data-bs-auto-close="outside"
+        {% endif %}
+    >
+        <span class="material-symbols-outlined" style="pointer-events: none;">
+            search
+        </span>
+        <input 
+            type="text" 
+            class="form-control border border-0 shadow-none {% if limit != -1 and limit == tags|length %}bg-secondary-subtle{% endif %}" 
+            id="dropdown-search-field" 
+            placeholder="Search"
+            onclick="debounceInput('dropdown-search-field',{{ limit }})"
+            {% if limit <= tags|length %}
+                disabled
+            {% endif %}
+            >
+    </div>
+    {% if limit > tags|length %}
+    <div class="dropdown-menu w-100">
+        <ul class="list-group list-group-flush" id="dropdown-items">
+            {% include "components/dropdown/dropdown-item.html" %}
+        </ul>
+    </div>
+    {% endif %}
+</div>

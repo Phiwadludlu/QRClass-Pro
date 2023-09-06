@@ -1,0 +1,66 @@
+{% macro self(data={},variant='default') -%} 
+{# variants: default | student | lecturer #}
+    <nav class="navbar navbar-expand-md">
+        <div class="container-lg">
+            <div class="d-flex align-items-center w-100">
+                <div class="d-flex justify-content-start">
+                    <a class="navbar-toggler border border-0" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle menu">
+                        <span class="navbar-toggler-icon"></span>
+                    </a>
+                </div>
+                <div class="container-fluid d-flex justify-content-md-start justify-content-center">
+                    <div class="d-grid gap-1">
+                        <a class="fs-3 fw-normal text-black link-underline link-underline-opacity-0" href="#">QRClassPro</a>
+                        <div class="d-md-none d-flex justify-content-center w-100">
+                            <div class="border border-secondary border-1 w-50"></div>
+                        </div>
+                    </div>
+                    <div class="offcanvas offcanvas-start flex-md-row align-items-md-center gap-2 justify-content-md-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="Menu">
+                        <div class="d-md-none d-flex justify-content-end p-4">
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        {% if variant != 'default' %}
+                        <div class="d-flex">
+                            <div class="d-md-none d-flex justify-content-center align-items-center col-4 px-4">
+                                <span class="material-symbols-outlined d-flex justify-content-center align-items-center rounded-circle bg-secondary-subtle p-3">person</span>
+                            </div>
+                            <div class="col d-md-flex flex-column justify-content-md-center">
+                                <p class="fw-normal fs-5 mb-0">{{ data.username }}</p>
+                                {% if variant == 'student' %}
+                                <p class="d-md-none fw-lighter fs-6 mb-0">{{ data.qualification }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="d-md-none d-flex p-4 h-100"></div>
+                        {% if variant != 'default' %}
+                        <ul class="navbar-nav d-grid gap-2 mb-3 d-md-flex justify-content-md-end mb-md-0 mb-4 px-md-0 px-3">
+                            <li class="nav-item">
+                              <a class="btn btn-dark rounded-0 w-100" href="#">Logout</a> <!-- TODO: Log out redirect -->
+                            </li>
+                        </ul>
+                        {% else %}
+                        <ul class="navbar-nav d-grid gap-2 d-md-flex justify-content-md-end mb-md-0 mb-4 px-md-0 px-3">
+                            <li class="nav-item"> 
+                              <a class="btn btn-outline-secondary rounded-0 w-100" href="#">Sign In</a> <!-- TODO: Sign In redirect -->
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-dark rounded-0 w-100" href="#">Sign Up</a> <!-- TODO: Sign Up redirect -->
+                            </li>
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if variant != 'student' %}
+                <div class="d-md-none"></div>
+                {% else %}
+                <div class="d-md-none d-flex justify-content-end"> <!-- TODO: QR Code Scanner redirect -->
+                    <a class="navbar-toggler border border-0" href="#" role="button">
+                        <span class="material-symbols-outlined">qr_code_scanner</span>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+{%- endmacro %}

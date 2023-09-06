@@ -3,7 +3,7 @@ from routes.core_route import core_route
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object('config')
+    app.config.from_object('config') 
 
     return app
 

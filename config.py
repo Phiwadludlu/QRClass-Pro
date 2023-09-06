@@ -1,2 +1,2 @@
-Flask_ENV = "development"
-Flask_APP= "app"
+FLASK_ENV = "development"
+FLASK_APP = "app"
