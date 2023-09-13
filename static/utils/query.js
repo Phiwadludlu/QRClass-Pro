@@ -2,7 +2,7 @@ let tags = []
 
 function handleMultiSelectSearch (text, dropdown_items, limit=-1) {
     console.log('search limit | ', limit);
-    const content = fetchContent('http://127.0.0.1:5000/searchfield-config',JSON.stringify({value : text, dropdown_items : dropdown_items, tags : tags, limit : limit}));
+    const content = fetchContent('http://127.0.0.1:5000/api/v1/searchfield-config',JSON.stringify({value : text, dropdown_items : dropdown_items, tags : tags, limit : limit}));
     content.then((c) => {
         renderHTML('dropdown-items',c);
     });
@@ -23,7 +23,7 @@ async function handleDropdownItemClick (item, limit=-1) {
         "Content-Type": "application/json",
         }}).then((result) => result.json());
 
-    const content = fetchContent('http://127.0.0.1:5000/dropdown-config',JSON.stringify({value : item, dropdown_items : dropdown_items, tags : tags, limit : limit}));
+    const content = fetchContent('http://127.0.0.1:5000/api/v1/dropdown-config',JSON.stringify({value : item, dropdown_items : dropdown_items, tags : tags, limit : limit}));
     content.then((c) => {
         renderHTML('multiselect',c);
     });
@@ -39,7 +39,7 @@ async function debounceInput(id, limit=-1) {
     const waitTime = 800;
 
     const input = document.getElementById(id);
-    dropdown_items = await fetch('http://127.0.0.1:5000/dropdown-items',{ 
+    dropdown_items = await fetch('http://127.0.0.1:5000/api/v1/dropdown-items',{ 
         method : "GET",mode: "no-cors", cache: "no-cache",
         headers: {
         "Content-Type": "application/json",
