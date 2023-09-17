@@ -1,7 +1,8 @@
 from flask import Flask
 from routes.core_route import core_route
 from routes.api_route import api   
-
+import flask_security
+import models
 def create_app():
     app = Flask(__name__)
     app.config.from_object('config') 
@@ -11,6 +12,18 @@ def create_app():
 
 #Flask App instane
 app = create_app()
+
+#Linking models to app
+models.db.init_app(app)
+
+
+#Authentication config
+
+user_datastore = flask_security.SQLAlchemySessionUserDatastore(session=models.db.session, user_model=models.User, role_model=models.Role)
+security = flask_security.Security(app=app, datastore=user_datastore)
+security.init_app(app=app,register_blueprint=False)
+
+
 
 
 #Route Registrations here
