@@ -5,12 +5,31 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-lg px-4">
-    <section id="multiselect">
-        {% include 'components/dropdown/multiselect.html' %}
-    </section>
-    <!--
-        Write code for the layout here.
-    -->
+<div class="container-lg">
+    <div class="container-fluid d-flex justify-content-center">
+        <div class="d-grid">
+        <div class="row">
+            <p class="fs-2 fw-regular d-flex justify-content-center">Getting Started</p>
+            <p class="fs-6 fw-lighter d-flex justify-content-center">Select the modules you are doing this semester</p>
+        </div>
+        <div class="row">
+            <div class="d-md-none d-flex justify-content-center w-100">
+                <div class="border border-secondary border-1 w-50"></div>
+            </div>
+        </div>
+        <div class="d-grid gap-5 my-4">
+        <div class="row">
+            <section id="multiselect" class="h-auto">
+                {% include 'components/dropdown/multiselect.html' %}
+            </section>
+        </div>
+        <div class="row">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary w-75 d-flex justify-content-center">Let us go!</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
 </div>
 {% endblock %}
