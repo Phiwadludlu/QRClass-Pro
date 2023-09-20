@@ -1,4 +1,50 @@
 {% extends "base.html" %} {% block title %} | Sign In {% endblock %} {% block
 content %}
-<div class="container-lg px-4">karabo</div>
+<div class="container-lg px-4">
+  <div class="container-fluid">
+    <div class="row">
+      <p class="fs-2 d-flex justify-content-center">Sign In</p>
+
+      <p class="d-flex justify-content-center">
+        Sign in using your institution credentials
+      </p>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="form-floating w-75">
+        <input
+          type="email"
+          class="form-control"
+          id="signInEmail"
+          placeholder="Email"
+        />
+        <label for="signInEmail">Email Address</label>
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="form-floating w-75">
+        <input
+          type="password"
+          class="form-control"
+          id="signInPassword"
+          placeholder="Password"
+        />
+        <label for="signInPassword">Password</label>
+      </div>
+    </div>
+    <div class="row">
+      <button type="button" class="btn btn-secondary">Sign In</button>
+
+      <p class="d-flex justify-content-center">
+        Don't have an account?
+        <a
+          href="#"
+          class="text-body-secondary link-underline link-underline-opacity-0"
+          >Sign Up</a
+        >
+      </p>
+    </div>
+  </div>
+</div>
 {% endblock %}
