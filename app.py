@@ -20,7 +20,9 @@ models.db.init_app(app)
 #Authentication config
 
 user_datastore = flask_security.SQLAlchemySessionUserDatastore(session=models.db.session, user_model=models.User, role_model=models.Role)
+
 security = flask_security.Security(app=app, datastore=user_datastore)
+
 security.init_app(app=app,register_blueprint=False)
 
 

@@ -5,9 +5,109 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-lg px-4">
-    <!--
-        Write code for the layout here.
-    -->
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .button {
+            background-color: white; /* Initially set to white */
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+        .button.active {
+            background-color: grey; /* When active, set to grey */
+            color: white;
+        }
+        .input-field {
+            margin: 10px 0;
+            padding: 10px;
+            width: 50%; /* Set to 50% width */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            width: 80%;
+            
+            
+        }
+        .input-group-text {
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+        }
+      
+        .login-link {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sign Up</h1>
+        <div class="button-group">
+            <button class="button" onclick="selectUser('student')" data-user="student">Student</button>
+            <button class="button" onclick="selectUser('lecturer')" data-user="lecturer">Lecturer</button>
+        </div>
+        <p>Create an account using your institution's credentials</p>
+        <form action="#" method="post" class="form">
+            <input type="text" class="input-field" name="fullName" placeholder="Full Name" required>
+            <div class="form-group mb-3">
+            
+                <input type="text" class="input-field" placeholder="studentnumber@dut4life.ac.za" aria-label="Username" aria-describedby="basic-addon2" id="email">
+            </div>
+            <input type="password" class="input-field" name="password" placeholder="Password" required><br><br><br>
+            <button type="submit" class="button" style="background-color: lightgrey;">Sign Up</button>
+        </form>
+        <br>
+        <p class="login-link">Already have an account? <a href="#">Login</a></p>
+    </div>
+    
+    <script>
+        // Initially, set the 'Student' button as active (grey)
+        document.querySelector('.button[data-user="student"]').classList.add('active');
+
+        function selectUser(userType) {
+            const buttons = document.querySelectorAll(".button");
+            buttons.forEach(button => {
+                button.classList.remove("active");
+            });
+
+            const selectedButton = document.querySelector(`.button[data-user="${userType}"]`);
+            selectedButton.classList.add('active');
+        }
+    </script>
+</body>
+</html>
+
+
+
 {% endblock %}

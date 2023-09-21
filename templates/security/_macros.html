@@ -1,6 +1,7 @@
 {% macro render_field_with_errors(field) %}
-  <div class="fs-div" id="{{ field.id|default('fs-field') }}">
-    {{ field.label }} {{ field(**kwargs)|safe }}
+  <div class="form-group mb-3 col-md-4 col-8" id="{{ field.id|default('fs-field') }}">
+   
+    {{ field(**kwargs)|safe }}
     {% if field.errors %}
       
         {% for error in field.errors %}<div class="" style="color: red;">{{ error }}</div>{% endfor %}
@@ -10,7 +11,7 @@
 {% endmacro %}
 
 {% macro render_field(field) %}
-  <div class="fs-div" id="{{ field.id|default('fs-field') }}">{{ field(**kwargs)|safe }}</div>
+  <div class="" id="{{ field.id|default('fs-field') }}">{{ field(**kwargs)|safe }}</div>
 {% endmacro %}
 
 {% macro render_field_errors(field) %}

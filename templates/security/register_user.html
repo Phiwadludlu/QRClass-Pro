@@ -2,23 +2,101 @@
 {% from "security/_macros.html" import render_field_with_errors, render_field, render_form_errors %}
 
 {% block content %}
+<style>
+  body {
+    background-color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    text-align: center;
+}
+.button-group {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.button {
+    background-color: white; /* Initially set to white */
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px;
+}
+.button.active {
+    background-color: grey; /* When active, set to grey */
+    color: white;
+}
+.input-field {
+    margin: 10px 0;
+    padding: 10px;
+    width: 50%; /* Set to 50% width */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.input-group {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    padding: 10px;
+    width: 80%;
+    
+    
+}
+.input-group-text {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+}
 
-<div class="container py-3 px-3">
+.login-link {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+</style>
+<div class="container">
   {% include "security/_messages.html" %}
- 
-  <h1>{{ _fsdomain('Register') }}</h1>
-  <form action="{{ url_for_security('register') }}" method="post" name="register_user_form">
+ <div class="container">
+  <h1>Sign Up</h1>
+  <div class="button-group">
+    <button class="button" onclick="selectUser('student')" data-user="student">Student</button>
+    <button class="button" onclick="selectUser('lecturer')" data-user="lecturer">Lecturer</button>
+</div>
+  <form action="{{ url_for_security('register') }}" method="post" name="register_user_form" class="container mx-auto px-3 row justify-content-center">
     {{ register_user_form.hidden_tag() }}
     {{ render_form_errors(register_user_form) }}
 
-    {{ render_field_with_errors(register_user_form.email, class="form-control") }}
+    {{ render_field_with_errors(register_user_form.email, class="form-control", placeholder="") }}
     
-    {{ render_field_with_errors(register_user_form.password, class="form-control") }}
+    {{ render_field_with_errors(register_user_form.password, class="form-control ") }}
     {% if register_user_form.password_confirm %}
       {{ render_field_with_errors(register_user_form.password_confirm, class="form-control") }}
     {% endif %}
-    {{ render_field(register_user_form.submit, class = "btn btn-dark rounded-0 w-100") }}
+    {{ render_field(register_user_form.submit, class = "button mt-3", style="background-color: lightgrey;") }}
   </form>
-  {% include "security/_menu.html" %}
+  
 </div>
+
+<script>
+   // Initially, set the 'Student' button as active (grey)
+   document.querySelector('.button[data-user="student"]').classList.add('active');
+
+   function selectUser(userType) {
+       const buttons = document.querySelectorAll(".button");
+       buttons.forEach(button => {
+           button.classList.remove("active");
+       });
+
+       const selectedButton = document.querySelector(`.button[data-user="${userType}"]`);
+       selectedButton.classList.add('active');
+   }
+
+</script>
 {% endblock content %}
