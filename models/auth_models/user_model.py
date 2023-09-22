@@ -17,4 +17,4 @@ class User(db.Model, fsqla.FsUserMixin):
     created_at = db.Column(db.DateTime, default=datetime.now())
 
     #Relationship with the roles table
-    roles = db.relationship('Role', secondary='role_users', backref=backref("users", lazy="dynamic"))
+    roles = db.relationship('Role', secondary='roles_users', backref=backref("users", lazy="dynamic"))
