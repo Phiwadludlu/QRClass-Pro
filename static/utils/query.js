@@ -1,14 +1,13 @@
 let tags = []
 
-function handleMultiSelectSearch (text, dropdown_items, limit=-1) {
-    console.log('search limit | ', limit);
-    const content = fetchContent('http://127.0.0.1:5000/api/v1/searchfield-config',JSON.stringify({value : text, dropdown_items : dropdown_items, tags : tags, limit : limit}));
+function handleMultiselectSearch (text, dropdown_items, limit=-1) {
+    const content = fetchContent('http://127.0.0.1:5000/api/v1/config/multiselect/search',JSON.stringify({value : text, dropdown_items : dropdown_items, tags : tags, limit : limit}));
     content.then((c) => {
         renderHTML('dropdown-items',c);
     });
 }
 
-async function handleDropdownItemClick (item, limit=-1) {
+async function handleMultiselectDropdown (item, type, limit=-1) {
     console.log(limit);
     if (!tags.includes(item)) {
         tags.push(item)
@@ -17,13 +16,13 @@ async function handleDropdownItemClick (item, limit=-1) {
     }
     console.log(tags);
 
-    dropdown_items = await fetch('http://127.0.0.1:5000/dropdown-items',{ 
+    dropdown_items = await fetch(`http://127.0.0.1:5000/api/v1/${type}/all`,{
         method : "GET",mode: "no-cors", cache: "no-cache",
         headers: {
         "Content-Type": "application/json",
         }}).then((result) => result.json());
 
-    const content = fetchContent('http://127.0.0.1:5000/api/v1/dropdown-config',JSON.stringify({value : item, dropdown_items : dropdown_items, tags : tags, limit : limit}));
+    const content = fetchContent('http://127.0.0.1:5000/api/v1/config/multiselect/dropdown',JSON.stringify({value : item, dropdown_items : dropdown_items, tags : tags, limit : limit}));
     content.then((c) => {
         renderHTML('multiselect',c);
     });
@@ -34,12 +33,12 @@ async function handleDropdownItemClick (item, limit=-1) {
  * @param {string} id - an identifier for target element
  * @param {function} cb - a callback function to run after timeout
  */
-async function debounceInput(id, limit=-1) {
+async function debounceInput(id, type, limit=-1) {
     let timeoutId;
     const waitTime = 800;
 
     const input = document.getElementById(id);
-    dropdown_items = await fetch('http://127.0.0.1:5000/api/v1/dropdown-items',{ 
+    dropdown_items = await fetch(`http://127.0.0.1:5000/api/v1/${type}/all`,{ 
         method : "GET",mode: "no-cors", cache: "no-cache",
         headers: {
         "Content-Type": "application/json",
@@ -51,7 +50,7 @@ async function debounceInput(id, limit=-1) {
         clearTimeout(timeoutId);
 
         timeoutId = setTimeout(() => {
-            handleMultiSelectSearch(text, dropdown_items, limit);
+            handleMultiselectSearch(text, dropdown_items, limit);
             }, waitTime);
         });
 }

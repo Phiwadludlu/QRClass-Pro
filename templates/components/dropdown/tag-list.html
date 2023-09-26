@@ -1,11 +1,11 @@
-<ul class="list-group list-group-horizontal gap-3">
+<ul class="list-group list-group-horizontal gap-1 d-flex align-content-start flex-wrap mt-2">
     <!-- clicking any of these buttons will remove the item from the selected items list-->
     {% for tag in tags %}
-    <li class="list-group-item border border-0 px-0">
+    <li class="list-group-item border border-0 p-0">
         <button 
             type="button" 
-            class="btn btn-outline-secondary d-flex justify-content-center rounded-pill gap-2" 
-            onclick="handleDropdownItemClick('{{ tag }}',{{ limit }})">
+            class="btn btn-outline-secondary d-flex justify-content-center rounded-pill fs-6 p-2" 
+            onclick="handleMultiselectDropdown('{{ tag }}', '{{ dropdown_items[0].type }}' ,{{ limit }})">
                 {{ tag }}
                 <span class="material-symbols-outlined">
                     close
