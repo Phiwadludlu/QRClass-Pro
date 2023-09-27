@@ -1,6 +1,7 @@
 import os
 import dotenv
 
+
 #Loading environment variables
 dotenv.load_dotenv()
 
@@ -24,6 +25,8 @@ SQLALCHEMY_TRACK_MODIFICATION = False
 SECURITY_PASSWORD_SALT = os.getenv("SECURITY_PASSWORD_SALT")
 REMEMBER_COOKIE_SAMESITE = "strict"
 SESSION_COOKIE_SAMESITE = "strict"
-SECURITY_REGISTERABLE = True
+
+SECURITY_REGISTERABLE = False
+
 SECURITY_SEND_REGISTER_EMAIL = False
 SECURITY_EMAIL_VALIDATOR_ARGS = {"check_deliverability": False}

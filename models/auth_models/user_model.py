@@ -5,8 +5,10 @@ from .roles_model import RoleUsers, Role
 from sqlalchemy.orm import relationship, backref
 
 #USER MODEL 
-class User(db.Model, fsqla.FsUserMixin):
 
+
+class User(db.Model, fsqla.FsUserMixin):
+    """Stores user information such as email username and password"""
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -18,3 +20,4 @@ class User(db.Model, fsqla.FsUserMixin):
 
     #Relationship with the roles table
     roles = db.relationship('Role', secondary='roles_users', backref=backref("users", lazy="dynamic"))
+

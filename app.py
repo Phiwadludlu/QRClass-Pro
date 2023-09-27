@@ -1,4 +1,5 @@
 from flask import Flask
+from forms.auth_forms.sign_up_form import MyRegisterForm
 from routes.core_route import core_route
 from routes.api_route import api   
 import flask_security
@@ -21,7 +22,7 @@ models.db.init_app(app)
 
 user_datastore = flask_security.SQLAlchemySessionUserDatastore(session=models.db.session, user_model=models.User, role_model=models.Role)
 
-security = flask_security.Security(app=app, datastore=user_datastore)
+security = flask_security.Security(app=app, datastore=user_datastore, register_form=MyRegisterForm)
 
 security.init_app(app=app,register_blueprint=False)
 
