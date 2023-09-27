@@ -2,10 +2,17 @@ from flask import render_template, request
 from utils.multiselect_filter import filter
 import json
 
-def getAllItems():
-    return [{'id':'chk-0', 'name' : 'BACHELOR OF INF & COM TECHNOLOGY', 'level' : '3', 'code' : 'BINCT'},{'id':'chk-1','name':'DIPLOMA IN ICT APPLICATIONS DEVELOPMENT','level': '2', 'code' : 'DIIAD1'}]
+def getAllQualifications():
+    return [{'id':'BINCT1', 'name' : 'BACHELOR OF INF & COM TECHNOLOGY', 'code' : 'BINCT1', 'type':'qualification'},{'id':'DIIAD1','name':'DIPLOMA IN ICT APPLICATIONS DEVELOPMENT','code' : 'DIIAD1', 'type':'qualification'}]
 
-def handleMultiSelect():
+def getAllModules():
+    return [{'id':'SEN301','name' : 'Software Engineering', 'code' : 'SFEN301', 'type':'module'}, 
+            {'id':'PRJB301','name' : 'Project B', 'code' : 'PRJB301', 'type':'module'}, 
+            {'id':'MCHI301','name' : 'Machine Intelligence', 'code' : 'MCHI301', 'type':'module'}, 
+            {'id':'PJMN301','name' : 'Project Management', 'code' : 'PJMN301', 'type':'module'},
+            {'id':'PBDV301','name' : 'Platform Based Programming', 'code' : 'PBDV301', 'type':'module'}]
+
+def handleMultiselectDropdown():
     data = request.data
     unpacked = json.loads(json.loads(data))
 
@@ -17,7 +24,7 @@ def handleMultiSelect():
     
     return render_template("components/dropdown/multiselect.html", dropdown_items=dropdown_items, tags=tags, limit=limit)
 
-def handleSearchField():
+def handleMultiselectSearch():
     if request.method == "POST":
         data = request.data
         unpacked = json.loads(json.loads(data))

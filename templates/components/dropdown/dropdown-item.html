@@ -6,11 +6,11 @@
         type="checkbox" 
         value="{{ item.code }}" 
         id="{{item.id}}"
-        onclick="handleDropdownItemClick('{{ item.code }}',{{ limit }})" 
+        onclick="handleMultiselectDropdown('{{ item.code }}', '{{ item.type }}',{{ limit }})" 
         {% if item.code in tags %}
             checked
         {% endif %}>
-        <label class="form-check-label stretched-link" for="{{item.id}}">{{ item.code }} | {{ item.level }} | {{ item.name }}</label>
+        <label class="form-check-label stretched-link" for="{{item.id}}">{{ item.code }} | {{ item.name }}</label>
     </div>
 </li>    
 {% endfor %}
