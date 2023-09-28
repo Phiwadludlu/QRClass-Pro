@@ -1,6 +1,7 @@
 
 """The controllers module is for business logic"""
 from flask import redirect, render_template,request, url_for,flash
+from models.auth_models.roles_model import Role
 import services
 
 from flask_security import auth_required
@@ -16,7 +17,7 @@ from forms.auth_forms.sign_up_form import StudentSignUp,LecturerSignUp, MyRegist
 
 
 
-@auth_required()
+
 def index():
     dropdown_items = [{'id':'chk-0', 'name' : 'BACHELOR OF INF & COM TECHNOLOGY', 'level' : '3', 'code' : 'BINCT'},{'id':'chk-1','name':'DIPLOMA IN ICT APPLICATIONS DEVELOPMENT','level': '2', 'code' : 'DIIAD1'}];
     limit = 2
@@ -41,12 +42,17 @@ def signUp():
 
     if request.method=="POST":
         if register_user_form.validate_on_submit():
-            
-            #Add user to DB logic here
-            user = User(email= register_user_form.email.data, password=hash_password(register_user_form.password.data), student_number = register_user_form.student_number.data, active=True )
-            user.fs_uniquifier = user.get_auth_token()
 
-            db.session.add(user)
+
+            student_role = Role.query.first_or_404()
+
+            #Add user to DB logic here
+            new_user = User(email= register_user_form.email.data, password=hash_password(register_user_form.password.data), student_number = register_user_form.student_number.data, active=True )
+            new_user.fs_uniquifier = new_user.get_auth_token()
+            new_user.is_active = True
+            new_user.roles.append(student_role)
+
+            db.session.add(new_user)
             db.session.commit()
 
             flash("Account created successfully",category="info")

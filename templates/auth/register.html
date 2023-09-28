@@ -77,7 +77,7 @@
     {{ render_form_errors(register_user_form) }}
 
     {{ render_field_with_errors(register_user_form.email, class="form-control col-lg-4 col-md-4 col-sm-8 ", placeholder="Email") }}
-    {{ render_field_with_errors(register_user_form.student_number, class="form-control col-lg-4 col-sm-8 ", placeholder="Student Number") }}
+    {{ render_field_with_errors(register_user_form.student_number, class="form-control col-lg-4 col-sm-8 ", placeholder="Student Number or Staff Number") }}
     
     {{ render_field_with_errors(register_user_form.password, class="form-control col-lg-4 col-sm-8 ", placeholder="Password") }}
     {% if register_user_form.password_confirm %}
@@ -89,6 +89,7 @@
 </div>
 
 <script>
+    
    // Initially, set the 'Student' button as active (grey)
    document.querySelector('.button[data-user="student"]').classList.add('active');
 

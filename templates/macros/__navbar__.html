@@ -10,7 +10,7 @@
                 </div>
                 <div class="container-fluid d-flex justify-content-md-start justify-content-center">
                     <div class="d-grid gap-1">
-                        <a class="fs-3 fw-normal text-black link-underline link-underline-opacity-0" href="#">QRClassPro</a>
+                        <a class="fs-3 fw-normal text-black link-underline link-underline-opacity-0" href="/">QRClassPro</a>
                         <div class="d-md-none d-flex justify-content-center w-100">
                             <div class="border border-secondary border-1 w-50"></div>
                         </div>
@@ -36,16 +36,16 @@
                         {% if variant != 'default' %}
                         <ul class="navbar-nav d-grid gap-2 mb-3 d-md-flex justify-content-md-end mb-md-0 mb-4 px-md-0 px-3">
                             <li class="nav-item">
-                              <a class="btn btn-dark rounded-0 w-100" href="#">Logout</a> <!-- TODO: Log out redirect -->
+                              <a class="btn btn-dark rounded-0 w-100" href="/logout">Logout</a> <!-- TODO: Log out redirect -->
                             </li>
                         </ul>
                         {% else %}
                         <ul class="navbar-nav d-grid gap-2 d-md-flex justify-content-md-end mb-md-0 mb-4 px-md-0 px-3">
                             <li class="nav-item"> 
-                              <a class="btn btn-outline-secondary rounded-0 w-100" href="#">Sign In</a> <!-- TODO: Sign In redirect -->
+                              <a class="btn btn-outline-secondary rounded-0 w-100" href="/login">Sign In</a> <!-- TODO: Sign In redirect -->
                             </li>
                             <li class="nav-item">
-                                <a class="btn btn-dark rounded-0 w-100" href="#">Sign Up</a> <!-- TODO: Sign Up redirect -->
+                                <a class="btn btn-dark rounded-0 w-100" href="{{url_for("core_routes.signUp")}}">Sign Up</a> <!-- TODO: Sign Up redirect -->
                             </li>
                         </ul>
                         {% endif %}

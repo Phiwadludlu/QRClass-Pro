@@ -1,8 +1,11 @@
-from flask_wtf import FlaskForm
-
 from flask_security.forms import RegisterForm
+from flask_wtf import FlaskForm
+from wtforms import (EmailField, IntegerField, PasswordField, StringField,
+                     validators)
 
-from wtforms import (EmailField, StringField, IntegerField, PasswordField, validators)
+from models.auth_models.user_model import User
+from utils.authentication_utils import student_number_validator
+
 
 class StudentSignUp (FlaskForm):
 
@@ -20,8 +23,11 @@ class LecturerSignUp(FlaskForm):
     confirm_password = PasswordField("Confrim password", validators=[validators.DataRequired()])
 
 
+
+
+
 class MyRegisterForm (RegisterForm):
 
-    student_number = StringField("Student Number", validators=[validators.DataRequired(), validators.length(min=8, max=8, message="Student number is invalid") ])
+    student_number = StringField("Student Number", validators=[validators.DataRequired(), validators.length(min=8, max=8, message="Student number is invalid"), student_number_validator ])
 
-    
+
