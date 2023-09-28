@@ -3,105 +3,143 @@
 
 {% block content %}
 <style>
-  body {
-    background-color: white;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-.container {
-    text-align: center;
-}
-.button-group {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-.button {
-    background-color: white; /* Initially set to white */
-    color: #333;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 0 10px;
-}
-.button.active {
-    background-color: grey; /* When active, set to grey */
-    color: white;
-}
-.input-field {
-    margin: 10px 0;
-    padding: 10px;
-    width: 50%; /* Set to 50% width */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-.input-group {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-    padding: 10px;
-    width: 80%;
-    
-    
-}
-.input-group-text {
-    background-color: #f1f1f1;
-    border: 1px solid #ccc;
-}
+    body {
+        background-color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
 
-.login-link {
-    margin-top: 10px;
-    font-size: 14px;
-}
+    .container {
+        text-align: center;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .button {
+        background-color: white;
+        /* Initially set to white */
+        color: #333;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 0 10px;
+    }
+
+    .button.active {
+        background-color: grey;
+        /* When active, set to grey */
+        color: white;
+    }
+
+    .input-field {
+        margin: 10px 0;
+        padding: 10px;
+        width: 50%;
+        /* Set to 50% width */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+        padding: 10px;
+        width: 80%;
 
 
+    }
 
+    .input-group-text {
+        background-color: #f1f1f1;
+        border: 1px solid #ccc;
+    }
+
+    .login-link {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .underline {
+        border-bottom: grey;
+        border-bottom-style: solid;
+        border-bottom-width: 2px;
+        width: 10%;
+        justify-content: center
+    }
+
+    .register-button{
+        background-color: grey;
+        color:white;
+        
+    }
+
+    .register-button:hover{
+        background-color: lightgrey ;
+        color:black;
+    }
 </style>
 <div class="container">
-  {% include "security/_messages.html" %}
- <div class="container">
-  <h1>Sign Up</h1>
-  <p class="text-muted">Use your student number or staff number to sign up</p>
-  <div class="button-group">
-    <button class="button" onclick="selectUser('student')" data-user="student">Student</button>
-    <button class="button" onclick="selectUser('lecturer')" data-user="lecturer">Lecturer</button>
-</div>
-  <form action="{{ url_for('core_routes.signUp') }}" method="post" name="register_user_form" class="container mx-auto px-3 ">
-    {{ register_user_form.csrf_token}}
-    {{ render_form_errors(register_user_form) }}
+    {% include "security/_messages.html" %}
+    <div class="container">
 
-    {{ render_field_with_errors(register_user_form.email, class="form-control col-lg-4 col-md-4 col-sm-8 ", placeholder="Email") }}
-    {{ render_field_with_errors(register_user_form.student_number, class="form-control col-lg-4 col-sm-8 ", placeholder="Student Number or Staff Number") }}
-    
-    {{ render_field_with_errors(register_user_form.password, class="form-control col-lg-4 col-sm-8 ", placeholder="Password") }}
-    {% if register_user_form.password_confirm %}
-      {{ render_field_with_errors(register_user_form.password_confirm, class="form-control col-lg-4 col-sm-8 ", placeholder="Confirm Password") }}
-    {% endif %}
-    {{ render_field(register_user_form.submit, class = "button mt-3", style="background-color: lightgrey;") }}
-  </form>
-  
-</div>
+        <h1>Sign Up</h1>
+        <p class="text-muted">Create an account using your institutions credentials</p>
+        <div class="button-group">
+            <button class="button" onclick="selectUser('student')" data-user="student">Student</button>
+            <button class="button" onclick="selectUser('lecturer')" data-user="lecturer">Lecturer</button>
+        </div>
+        <div class="container underline mb-3"
+           >
+        </div>
 
-<script>
-    
-   // Initially, set the 'Student' button as active (grey)
-   document.querySelector('.button[data-user="student"]').classList.add('active');
+        <form action="{{ url_for('core_routes.signUp') }}" method="post" name="register_user_form"
+            class="container mx-auto px-3 ">
+            {{ register_user_form.csrf_token}}
+            {{ render_form_errors(register_user_form) }}
 
-   function selectUser(userType) {
-       const buttons = document.querySelectorAll(".button");
-       buttons.forEach(button => {
-           button.classList.remove("active");
-       });
+            {{ render_field_with_errors(register_user_form.email, class="form-control col-lg-4 col-md-4 col-sm-8 ",
+            placeholder="Email") }}
+            {{ render_field_with_errors(register_user_form.student_number, class="form-control col-lg-4 col-sm-8 ",
+            placeholder="Student Number or Staff Number") }}
 
-       const selectedButton = document.querySelector(`.button[data-user="${userType}"]`);
-       selectedButton.classList.add('active');
-   }
+            {{ render_field_with_errors(register_user_form.password, class="form-control col-lg-4 col-sm-8 ",
+            placeholder="Password") }}
+            {% if register_user_form.password_confirm %}
+            {{ render_field_with_errors(register_user_form.password_confirm, class="form-control col-lg-4 col-sm-8
+            ", placeholder="Confirm Password") }}
+            {% endif %}
+            {{ render_field(register_user_form.submit, class = "button mt-3 register-button")
+            }}
+        </form>
+        <p class="text text-muted mt-3">Have an account? <a href="/login">Login</a></p>
 
-</script>
-{% endblock content %}
+    </div>
+
+    <script>
+
+        // Initially, set the 'Student' button as active (grey)
+        document.querySelector('.button[data-user="student"]').classList.add('active');
+
+        function selectUser(userType) {
+            const buttons = document.querySelectorAll(".button");
+            buttons.forEach(button => {
+                button.classList.remove("active");
+            });
+
+            const selectedButton = document.querySelector(`.button[data-user="${userType}"]`);
+            selectedButton.classList.add('active');
+        }
+
+    </script>
+    {% endblock content %}
