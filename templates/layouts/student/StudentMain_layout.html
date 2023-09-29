@@ -1,13 +1,60 @@
 {% extends "base.html" %}
 
 {% block title %}
-    
+        | Student Dashboard
 {% endblock %}
 
 {% block content %}
+{% include "components/navbar/student-navbar.html" %}
 <div class="container-lg px-4">
-    <!--
-        Write code for the layout here.
-    -->
+    
+    <div class="container text-center" >
+        <div class="row">
+            <div class="col" style="padding: 1rem; background-color: #fff; border: 2px solid #fff; color: black;">
+            </div>
+            <div class="col-6" style="padding: 1rem 0rem; margin: 0.9rem 0rem; border-bottom: 1px solid black; display: flex; align-items: center; justify-content: space-between; padding: 1rem; background-color: #fff; border: 2px solid #fff; color: black;">
+              <div><i class="fa-solid fa-bars" style="cursor: pointer;"></i></i></div>
+              <div><i class="fa-solid fa-qrcode" style="cursor: pointer;"></i></div>
+            </div>
+            <div class="col" style="padding: 1rem; background-color: #fff; border: 2px solid #fff; color: black;">
+            </div>
+          </div>
+        <div class="row">
+          <div class="col" style="padding: 1rem; background-color: #fff; border: 2px solid #fff; color: black;">
+          </div>
+          <div class="col-6" style="padding: 1rem 0rem; display: flex; flex-direction:column; align-items: flex-start; padding: 1rem; background-color: #fff; border: 2px solid #fff; color: black;">
+            <div class="user" style="display: flex; padding: 0.8rem 0rem; flex-direction: column; align-items: flex-start;">
+                <div>
+                    <h3 style="margin: 0px;">Hello, username</h3>
+                </div>
+                <div>
+                    <p style="margin: 0px;">Today's classes</p>
+                </div>
+            </div>
+            <div class="btnClass" style="width: 100%;display: flex; cursor: pointer; align-items: center; padding: 0.5rem 0.5rem; border-radius: 10px; justify-content: space-between; background-color: rgb(185, 175, 175);">
+                <div class="class-container">
+                    <p style="margin: 0px; color: #fff">MCHI301</p>
+                    <p style="margin: 0px; padding: 0px; color: #fff">Present</p>
+                </div>
+                <div class="time" >
+                    <p style="margin: 0px; color: #fff">09:00AM</p>
+                </div>
+            </div>
+          </div>
+          <div class="col" style="padding: 1rem; background-color: #fff; border: 2px solid #fff; color: black;">
+          </div>
+        </div>
+        <div class="row" style="margin-top: 6rem;">
+            <div class="col" style="padding: 1rem; background-color: #fff; border: 2px solid #fff; color: black;">
+            </div>
+            <div class="col-6" style="padding: 1rem 0rem; display: flex; align-items: center; justify-content: space-between; padding: 1rem; background-color: #fff; border: 2px solid #fff; color: black;">
+                <p style="margin: 0px;">View attendance report</p>
+                <i class="fa-solid fa-greater-than" style="cursor: pointer;"></i>
+            </div>
+            <div class="col" style="padding: 1rem; background-color: #fff; border: 2px solid #fff; color: black;">
+            </div>
+          </div>
+      </div>
+
 </div>
 {% endblock %}

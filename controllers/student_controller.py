@@ -1,6 +1,11 @@
 from flask import render_template
 from controllers.mutliselect_controller import getAllQualifications, getAllModules
 
+
+def index():
+
+    return render_template("layouts/student/StudentMain_layout.html")
+
 def gettingStarted1():
     qualificationData = getAllQualifications()
     limit = 1
