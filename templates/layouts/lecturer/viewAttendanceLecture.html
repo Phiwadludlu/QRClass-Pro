@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance History</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <form>
+        <div class="container">
+            <h1>Attendance History</h1>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search...">
+                <select class="select-option">
+                    <option value="all">All</option>
+                    <option value="student">Student</option>
+                    <option value="modul">Module</option>
+                </select>
+                <button class="search-button">Search</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <!--Columns from db will be here-->
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows from db will be here -->
+                        <tr>
+                            <!--Values per row in here-->
+                            <td><!--Values per column in here--></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
