@@ -1,13 +1,48 @@
 {% extends "base.html" %}
 
+{% import "macros/__table__.html" as table %}
+
 {% block title %}
-    | Attendance
+| Attendance
 {% endblock %}
 
 {% block content %}
-<div class="container-lg px-4">
-    <!--
-        Write code for the layout here.
-    -->
+<div class="container-lg">
+    <div class="d-flex flex-row">
+        <button role="button" class="btn bg-transparent rounded border border-0">
+            <span class="material-symbols-outlined">
+                arrow_back_ios_new
+            </span>
+        </button>
+        <div class="col d-block pe-3 me-3">
+            <p class="fs-3 fw-medium mb-0 text-center">
+                Attendance history
+            </p>
+            <div class="d-md-none d-flex justify-content-center w-100">
+                <div class="border border-secondary border-1 w-50"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-2">
+        <div class="d-flex justify-content-center gap-2">
+            <button role="button" class="btn bg-secondary text-light rounded-pill px-4">
+                All
+            </button>
+            <button role="button" class="btn border border-2 bg-light text-secondary rounded-pill px-4">
+                Module
+            </button>
+            <button role="button" class="btn border border-2 bg-light text-secondary rounded-pill px-4">
+                Student
+            </button>
+        </div>
+    </div>
+    <div class="container mt-3" style="height: 100vh;">
+        <p class="fw-lighter">
+            Recent attendance
+        </p>
+        <div class="container h-100">
+            {{ table.self([]) }}
+        </div>
+    </div>
 </div>
 {% endblock %}

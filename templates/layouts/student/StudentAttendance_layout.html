@@ -1,65 +1,36 @@
 {% extends "base.html" %}
 
+{% import "macros/__table__.html" as table %}
+
 {% block title %}
-    | My Attendance
+| My Attendance
 {% endblock %}
 
 {% block content %}
-<div class="container-lg px-4">
-    <div class="container-lg px-4">
-        <div class="row gap-1">
-            <div class="col-1">
-                <a href="#" role="button" class="btn btn-light">
-                    <span class="material-symbols-outlined">
-                        arrow_back_ios
-                    </span>
-                </a>
-                
+<div class="container-lg">
+    <div class="d-flex flex-row">
+        <button role="button" class="btn bg-transparent rounded border border-0">
+            <span class="material-symbols-outlined">
+                arrow_back_ios_new
+            </span>
+        </button>
+        <div class="col d-block pe-3">
+            <p class="fs-3 fw-medium mb-0 text-center">
+                Attendance history
+            </p>
+            <div class="d-md-none d-flex justify-content-center w-100">
+                <div class="border border-secondary border-1 w-50"></div>
             </div>
-            <div class="col">
-                <div class="d-flex justify-content-center">
-                    <a class="fs-3 fw-normal text-black link-underline link-underline-opacity-0" href="#">Attendance History</a>
-                </div>
-                <div class="d-md-none d-flex justify-content-center w-100">
-                    <div class="border border-secondary border-1 w-50"></div>
-                </div>
-            </div>
-        </div>    
-    <div style="margin-bottom: 20px;"></div> <!-- Add space -->
-    <p class="fs-6 fw-regular">Recent Attendance</p>
-    <div class="container-lg d-flex justify-content-center">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Module</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>27/08/2023</td>
-                    <td>10:00</td>
-                    <td>SFEN</td>
-                    <td>Present</td>
-                </tr>
-                <tr>
-                    <td>26/08/2023</td>
-                    <td>09:00</td>
-                    <td>PJRB</td>
-                    <td>Absent</td>
-                </tr>
-                <tr>
-                    <td>25/08/2023</td>
-                    <td>11:00</td>
-                    <td>PRJB</td>
-                    <td>Cancelled</td>
-                </tr>
-            </tbody>
-        </table>
+        </div>
     </div>
-    
+    <div class="container mt-3" style="height: 100vh;">
+        <p class="fw-lighter">
+            Recent attendance
+        </p>
+        <div class="container h-100">
+            {{ table.self([]) }}
+        </div>
+    </div>
 </div>
 
 {% endblock %}

@@ -1,0 +1,26 @@
+{% import "macros/__multiselect__.html" as multiselect %}
+<div class="container-md" style="height: 50vh;">
+    <div class="d-grid">
+        <div class="row">
+            <div class="d-flex flex-column align-items-center">
+                <p class="fs-2 fw-regular">
+                    Getting Started
+                </p>
+                <p class="fs-6 fw-lighter">
+                    Select the qualification you are doing.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-md-none d-flex justify-content-center">
+                <div class="border border-secondary border-1 w-50"></div>
+            </div>
+        </div>
+        <div class="row">
+            <section class="mt-3" id="multiselect-qualification">
+                {{ multiselect.self( qualifications, qualification_tags, qualification_limit, qualification_tags_length, module_tags_length) }}
+            </section>
+            <div style="height: 25vh;"></div>
+        </div>
+    </div>
+</div>

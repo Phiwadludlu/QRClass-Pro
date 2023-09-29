@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import get_template_attribute, render_template, request
 from utils.multiselect_filter import filter
 import json
 
@@ -19,10 +19,14 @@ def handleMultiselectDropdown():
     tags = unpacked['tags']
     dropdown_items = unpacked['dropdown_items']
     limit=unpacked['limit']
+    module_tags_length = unpacked['module_tags_length']
+    qualification_tags_length = unpacked['qualification_tags_length']
 
-    print(dropdown_items)
-    
-    return render_template("components/dropdown/multiselect.html", dropdown_items=dropdown_items, tags=tags, limit=limit)
+    print('module_count [%s] | qualification_count [%s]' % (module_tags_length, qualification_tags_length))
+
+    multiselect = get_template_attribute("macros/__multiselect__.html","self")
+
+    return multiselect(dropdown_items, tags, limit, qualification_tags_length, module_tags_length)
 
 def handleMultiselectSearch():
     if request.method == "POST":

@@ -5,4 +5,3 @@ from controllers.mutliselect_controller import getAllQualifications, getAllModul
 
 def index():
     return render_template('layouts/LandingPage_layout.html')
-

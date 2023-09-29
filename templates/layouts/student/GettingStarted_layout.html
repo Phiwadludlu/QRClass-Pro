@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block title %} | Getting Started {% endblock %}
+{% block content %}
+
+<div class="container-lg px-4">
+    <div id="carouselGettingStarted" class="carousel carousel-dark slide min-vh-100 d-flex justify-content-center">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselGettingStarted" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Step 1"></button>
+            <button type="button" data-bs-target="#carouselGettingStarted" data-bs-slide-to="1"
+                aria-label="Step 2"></button>
+        </div>
+        <div class="carousel-inner d-flex align-items-center" style="height: 90vh; width: 48vh;">
+            <div class="carousel-item active">
+                {% include 'layouts/student/GettingStarted1_layout.html' %}
+            </div>
+            <div class="carousel-item">
+                {% include 'layouts/student/GettingStarted2_layout.html' %}
+            </div>
+        </div>
+            <button class="carousel-control-prev" id="prev-carousel" type="button" data-bs-target="#carouselGettingStarted"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" id="next-carousel" type="button" data-bs-target="#carouselGettingStarted"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+    </div>
+</div>
+
+{% endblock %}
