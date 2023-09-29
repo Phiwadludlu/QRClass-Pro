@@ -26,8 +26,10 @@ class LecturerSignUp(FlaskForm):
 
 
 
-class MyRegisterForm (RegisterForm):
+class StudentRegisterForm (RegisterForm):
 
     student_number = StringField("Student Number", validators=[validators.DataRequired(), validators.length(min=8, max=8, message="Student number is invalid"), student_number_validator ])
 
+class LecturerRegisterForm (RegisterForm):
 
+    staff_number = StringField("Staff Number", validators=[validators.DataRequired(), validators.length(min=8, max=8, message="Student number is invalid"), student_number_validator ])
