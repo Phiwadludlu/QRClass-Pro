@@ -25,23 +25,23 @@
     </div>
     <div class="container-fluid mt-2">
         <div class="d-flex justify-content-center gap-2">
-            <button role="button" class="btn bg-secondary text-light rounded-pill px-4">
+            <a role="button" href="/lecturer/attendance/all" class="btn bg-secondary text-light rounded-pill px-4">
                 All
-            </button>
-            <button role="button" class="btn border border-2 bg-light text-secondary rounded-pill px-4">
+            </a>
+            <a role="button" href="/lecturer/attendance/module" class="btn border border-2 bg-light text-secondary rounded-pill px-4">
                 Module
-            </button>
-            <button role="button" class="btn border border-2 bg-light text-secondary rounded-pill px-4">
+            </a>
+            <a role="button" href="/lecturer/attendance/student" class="btn border border-2 bg-light text-secondary rounded-pill px-4">
                 Student
-            </button>
+            </a>
         </div>
     </div>
     <div class="container mt-3" style="height: 100vh;">
         <p class="fw-lighter">
             Recent attendance
         </p>
-        <div class="table-responsive h-100">
-            {{ table.self([]) }}
+        <div class="table-responsive h-100" id="table-area">
+            {{ table.self(attendance_data) }}
         </div>
     </div>
 </div>

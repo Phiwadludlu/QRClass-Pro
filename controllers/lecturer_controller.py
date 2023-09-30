@@ -1,17 +1,17 @@
 from flask import render_template
+from controllers import test_db as ddb
 
-def viewAttendance():
-    return render_template('layouts/lecturer/LecturerAttendance.html')
+def viewByAllAttendance():
+    return render_template('layouts/lecturer/LecturerAttendance_All_layout.html', attendance_data=ddb.getAllAttendance())
+
+def viewByModuleAttendance():
+    return render_template('layouts/lecturer/LecturerAttendance_Module_layout.html', modules=ddb.getAllModules(), module_limit=1, module_tags=[])
+
+def viewByStudentAttendance():
+    return render_template('layouts/lecturer/LecturerAttendance_Student_layout.html')
 
 def activeQR():
-    qr_data = [{"module":"Software Engineering III","session":"30/09/2023 09:30 AM","expiration":"30/09/2023 12:00 PM","expired":0,"qr_url":"path/to/blob/storage"},
-{"module":"Software Engineering III","session":"30/09/2023 09:30 AM","expiration":"30/09/2023 12:00 PM","expired":0,"qr_url":"path/to/blob/storage"},
-{"module":"Software Engineering III","session":"30/09/2023 09:30 AM","expiration":"30/09/2023 12:00 PM","expired":0,"qr_url":"path/to/blob/storage"},
-{"module":"Software Engineering III","session":"30/09/2023 09:30 AM","expiration":"30/09/2023 12:00 PM","expired":0,"qr_url":"path/to/blob/storage"},
-{"module":"Software Engineering III","session":"30/09/2023 09:30 AM","expiration":"30/09/2023 12:00 PM","expired":0,"qr_url":"path/to/blob/storage"},
-{"module":"Software Engineering III","session":"30/09/2023 09:30 AM","expiration":"30/09/2023 12:00 PM","expired":0,"qr_url":"path/to/blob/storage"},
-{"module":"Software Engineering III","session":"30/09/2023 09:30 AM","expiration":"30/09/2023 12:00 PM","expired":0,"qr_url":"path/to/blob/storage"},
-{"module":"Project B III","session":"28/09/2023 14:00 AM","expiration":"28/09/2023 12:00 PM","expired":1,"qr_url":"path/to/blob/storage"},
-{"module":"Project B III","session":"28/09/2023 14:00 AM","expiration":"28/09/2023 12:00 PM","expired":1,"qr_url":"path/to/blob/storage"},
-{"module":"Project B III","session":"28/09/2023 14:00 AM","expiration":"28/09/2023 12:00 PM","expired":1,"qr_url":"path/to/blob/storage"}]
-    return render_template('layouts/lecturer/ActiveQR_layout.html', qr_data=qr_data)
+    return render_template('layouts/lecturer/ActiveQR_layout.html', qr_data=ddb.getAllQR())
+
+def generateQR():
+    return render_template('layouts/lecturer/GenerateQR_layout.html')

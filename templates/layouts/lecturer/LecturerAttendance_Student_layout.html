@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% import "macros/__table__.html" as table %}
+
+{% block title %}
+| Attendance
+{% endblock %}
+
+{% block content %}
+<div class="container-lg">
+    <div class="d-flex flex-row">
+        <button role="button" class="btn bg-transparent rounded border border-0">
+            <span class="material-symbols-outlined">
+                arrow_back_ios_new
+            </span>
+        </button>
+        <div class="col d-block pe-3 me-3">
+            <p class="fs-3 fw-medium mb-0 text-center">
+                Attendance history
+            </p>
+            <div class="d-md-none d-flex justify-content-center w-100">
+                <div class="border border-secondary border-1 w-50"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-2">
+        <div class="d-flex justify-content-center gap-2">
+            <a role="button" href="/lecturer/attendance/all"
+                class="btn border border-2 bg-light text-secondary rounded-pill px-4">
+                All
+            </a>
+            <a role="button" href="/lecturer/attendance/module"
+                class="btn border border-2 bg-light text-secondary rounded-pill px-4">
+                Module
+            </a>
+            <a role="button" href="/lecturer/attendance/student" class="btn bg-secondary text-light rounded-pill px-4">
+                Student
+            </a>
+        </div>
+    </div>
+    <div class="container mt-3" style="height: 100vh;">
+        <p class="fw-lighter">
+            Type the student's student number below.
+        </p>
+        <div class="form-control d-flex align-items-center">
+            <span class="material-symbols-outlined" style="pointer-events: none;">
+                search
+            </span>
+            <searchfield></searchfield>
+        </div>
+        <div class="table-responsive h-100" id="table-area"></div>
+    </div>
+</div>
+{% endblock %}
