@@ -39,30 +39,29 @@ def login():
 @anonymous_user_required
 def signUp():
 
-    
-    
-    return render_template("auth/register.html")
 
+    
+    return redirect(url_for('core_routes.student_sign_up'))
 
 @anonymous_user_required
 def lecturer_sign_up():
     
-    register_user_form=LecturerRegisterForm()
+    register_lecturer_form=LecturerRegisterForm()
 
     
     if request.method=="POST":
-        if register_user_form.validate_on_submit():
+        if register_lecturer_form.validate_on_submit():
 
 
             lecturer_role = Role.query.filter_by(id=3).first_or_404()
 
             #Add user to DB logic here
-            new_user = User(email= register_user_form.email.data, password=hash_password(register_user_form.password.data), active=True )
+            new_user = User(email= register_lecturer_form.email.data, password=hash_password(register_lecturer_form.password.data), active=True )
             new_user.fs_uniquifier = new_user.get_auth_token()
             new_user.is_active = True
             new_user.roles.append(lecturer_role)
 
-            new_lecturer = Lecturer(staff_number = register_user_form.staff_number.data, user=new_user)
+            new_lecturer = Lecturer(staff_number = register_lecturer_form.staff_number.data, user=new_user)
 
             db.session.add(new_user)
             db.session.add(new_lecturer)
@@ -72,27 +71,27 @@ def lecturer_sign_up():
 
             return redirect(url_for("security.login"))
 
-    return render_template("components/forms/auth_forms/lecturer_form.html",register_user_form=register_user_form )
+    return render_template("components/forms/auth_forms/lecturer_form.html",register_lecturer_form=register_lecturer_form )
 
 
 @anonymous_user_required
 def student_sign_up():
     
-    register_user_form=StudentRegisterForm()
+    register_student_form=StudentRegisterForm()
     
     if request.method=="POST":
-        if register_user_form.validate_on_submit():
+        if register_student_form.validate_on_submit():
 
 
             student_role = Role.query.filter_by(id=2).first_or_404()
 
             #Add user to DB logic here
-            new_user = User(email= register_user_form.email.data, password=hash_password(register_user_form.password.data), active=True )
+            new_user = User(email= register_student_form.email.data, password=hash_password(register_student_form.password.data), active=True )
             new_user.fs_uniquifier = new_user.get_auth_token()
             new_user.is_active = True
             new_user.roles.append(student_role)
 
-            new_student = Student(student_number=register_user_form.student_number.data,user=new_user )
+            new_student = Student(student_number=register_student_form.student_number.data,user=new_user )
 
             db.session.add(new_user)
             db.session.add(new_student)
@@ -101,5 +100,5 @@ def student_sign_up():
             flash("Account created successfully",category="info")
 
             return redirect(url_for("security.login"))
-        
-    return render_template("components/forms/auth_forms/student_form.html",register_user_form=register_user_form )
+       
+    return render_template("components/forms/auth_forms/student_form.html",register_student_form=register_student_form )

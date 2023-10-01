@@ -1,118 +1,31 @@
-{% extends "base.html" %}
-{% from "security/_macros.html" import render_field_with_errors, render_field, render_form_errors %}
+{% extends 'auth/register.html' %}
+{%block form%}
+<form id="lecturer" action="{{ url_for('core_routes.lecturer_sign_up') }}" method="post" name="register_user_form"
+    class="container mx-auto px-3 ">
+    {{ register_lecturer_form.csrf_token}}
+    {{ render_form_errors(register_lecturer_form) }}
 
-{% block content %}
-<style>
-    body {
-        background-color: white;
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+    {{ render_field_with_errors(register_lecturer_form.email, class="form-control col-lg-4 col-md-4 col-sm-8 ",
+    placeholder="Email") }}
+    {{ render_field_with_errors(register_lecturer_form.staff_number, class="form-control col-lg-4 col-sm-8 ",
+    placeholder="Staff Number") }}
 
-    .container {
-        text-align: center;
-    }
+    {{ render_field_with_errors(register_lecturer_form.password, class="form-control col-lg-4 col-sm-8 ",
+    placeholder="Password") }}
+    {% if register_lecturer_form.password_confirm %}
+    {{ render_field_with_errors(register_lecturer_form.password_confirm, class="form-control col-lg-4 col-sm-8
+    ", placeholder="Confirm Password") }}
+    {% endif %}
+    {{ render_field(register_lecturer_form.submit, class = "button mt-3 register-button")
+    }}
+</form>
+<script>
 
-    .button-group {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 10px;
-    }
-
-    .button {
-        background-color: white;
-        /* Initially set to white */
-        color: #333;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin: 0 10px;
-    }
-
-    .button.active {
-        background-color: grey;
-        /* When active, set to grey */
-        color: white;
-    }
-
-    .input-field {
-        margin: 10px 0;
-        padding: 10px;
-        width: 50%;
-        /* Set to 50% width */
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    .input-group {
-        display: flex;
-        align-items: center;
-        margin: 10px 0;
-        padding: 10px;
-        width: 80%;
+    // Initially, set the 'Student' button as active (grey)
+    var button = document.querySelector('.button[data-user="lecturer"]').classList.add('active');
 
 
-    }
 
-    .input-group-text {
-        background-color: #f1f1f1;
-        border: 1px solid #ccc;
-    }
 
-    .login-link {
-        margin-top: 10px;
-        font-size: 14px;
-    }
-
-    .underline {
-        border-bottom: grey;
-        border-bottom-style: solid;
-        border-bottom-width: 2px;
-        width: 10%;
-        justify-content: center
-    }
-
-    .register-button{
-        background-color: grey;
-        color:white;
-        
-    }
-
-    .register-button:hover{
-        background-color: lightgrey ;
-        color:black;
-    }
-</style>
-<div class="container">
-    {% include "security/_messages.html" %}
-    
-
-        <form action="{{ url_for('api_routes.lecturer_sign_up') }}" method="post" name="register_user_form"
-            class="container mx-auto px-3 ">
-            {{ register_user_form.csrf_token}}
-            {{ render_form_errors(register_user_form) }}
-
-            {{ render_field_with_errors(register_user_form.email, class="form-control col-lg-4 col-md-4 col-sm-8 ",
-            placeholder="Email") }}
-            {{ render_field_with_errors(register_user_form.staff_number, class="form-control col-lg-4 col-sm-8 ",
-            placeholder="Staff Number") }}
-
-            {{ render_field_with_errors(register_user_form.password, class="form-control col-lg-4 col-sm-8 ",
-            placeholder="Password") }}
-            {% if register_user_form.password_confirm %}
-            {{ render_field_with_errors(register_user_form.password_confirm, class="form-control col-lg-4 col-sm-8
-            ", placeholder="Confirm Password") }}
-            {% endif %}
-            {{ render_field(register_user_form.submit, class = "button mt-3 register-button")
-            }}
-        </form>
-
-    
-
-    {% endblock content %}
+</script>
+{% endblock %}
