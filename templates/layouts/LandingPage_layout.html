@@ -1,17 +1,28 @@
 {% extends "base.html" %}
 
-{% block title %}
-    
-{% endblock %}
+{% block title %}{% endblock %}
 
 {% block content %}
-    {% include "components/navbar/no-auth-navbar.html" %}
-    <div class="container-lg px-4">
-        <section id="multiselect">
-            {% include 'components/dropdown/multiselect.html' %}
-        </section>
-        <!--
-            Write code for the layout here.
-        -->
+{% include "components/navbar/no-auth-navbar.html" %}
+<div class="container-lg px-4 h-100">
+    <div class="d-flex flex-column gap-5">
+        <div class="d-flex flex-column align-items-center mt-5">
+            <div class="row">
+                <p class="fs-2 fw-bold text-center">
+                    Attendance made easy!
+                </p>
+            </div>
+            <div class="row">
+                <p class="fw-lighter text-center">Log attendance for modules you have registered for within the Durban University of Technology.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-flex justify-content-center">
+                <button role="button" class="btn bg-secondary text-light" style="width: 50vh;">
+                    Log your attendance!
+                </button>
+            </div>
+        </div>
     </div>
+</div>
 {% endblock %}

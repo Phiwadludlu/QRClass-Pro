@@ -13,9 +13,9 @@
         <input 
             type="text" 
             class="form-control border border-0 shadow-none {% if limit != -1 and limit == tags|length %}bg-secondary-subtle{% endif %}" 
-            id="dropdown-search-field" 
+            id="multiselect-searchfield" 
             placeholder="Search"
-            onclick="debounceInput('dropdown-search-field',{{ limit }})"
+            onclick="debounceInput('multiselect-searchfield','{{dropdown_items[0].type}}' , {{ limit }})"
             {% if limit <= tags|length %}
                 disabled
             {% endif %}

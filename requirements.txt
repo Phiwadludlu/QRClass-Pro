@@ -9,3 +9,4 @@ Werkzeug==2.3.7
 flask-security-too
 python-dotenv
 flask-sqlalchemy
+flask-cors==4.0.0

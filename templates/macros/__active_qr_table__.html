@@ -1,0 +1,40 @@
+{% macro self(data=[], expired=0) -%}
+{% if data %}
+<table class="table table-striped ">
+    <thead>
+        <tr>
+            <th scope="col">Expiration Time</th>
+            <th scope="col">Module</th>
+            <th scope="col">Session</th>
+            {% if expired!=1 %}
+            <th scope="col">QR code</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        {% for item in data %}
+            {% if expired==0 and item.expired==1%}
+            {% elif expired==1 and item.expired==0%}
+            {% else %}
+            <tr>
+                <th scope="row">{{ item.expiration }}</th>
+                <td>{{ item.module }}</td>
+                <td>{{ item.session }}</td>
+                {% if not item.expired %}
+                <td>{{ item.qr_url }}</td>
+                {% endif %}
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="d-flex flex column align-items-center h-100">
+    <div class="container d-flex justify-content-center ">
+        <p class="fs-3 fw-medium text-secondary">
+            No items.
+        </p>
+    </div>
+</div>
+{% endif %}
+{%- endmacro %}

@@ -1,13 +1,45 @@
 {% extends "base.html" %}
 
+{% import "macros/__active_qr_table__.html" as table %}
+
 {% block title %}
-    | Active QR
+| Active QR
 {% endblock %}
 
 {% block content %}
-<div class="container-lg px-4">
-    <!--
-        Write code for the layout here.
-    -->
+<div class="container-lg">
+    <div class="d-flex flex-row">
+        <button role="button" class="btn bg-transparent rounded border border-0">
+            <span class="material-symbols-outlined">
+                arrow_back_ios_new
+            </span>
+        </button>
+        <div class="col d-block pe-3 me-3">
+            <p class="fs-3 fw-medium mb-0 text-center">
+                Active QRs
+            </p>
+            <div class="d-md-none d-flex justify-content-center w-100">
+                <div class="border border-secondary border-1 w-50"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-3" style="height: 100vh;">
+        <div class="container">
+            <p class="fw-lighter">
+                Still Active
+            </p>
+            <div class="table-responsive p-0 h-100">
+                {{ table.self(qr_data) }}
+            </div>
+        </div>
+        <div class="container">
+            <p class="fw-lighter">
+                Expired
+            </p>
+            <div class="table-responsive p-0 h-100">
+                {{ table.self(qr_data,1) }}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

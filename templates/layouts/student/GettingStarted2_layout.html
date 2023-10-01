@@ -1,16 +1,24 @@
-{% extends "base.html" %}
-
-{% block title %}
-    | Getting Started
-{% endblock %}
-
-{% block content %}
-<div class="container-lg px-4">
-    <section id="multiselect">
-        {% include 'components/dropdown/multiselect.html' %}
-    </section>
-    <!--
-        Write code for the layout here.
-    -->
+<div class="container-md" style="height: 50vh;">
+  <div class="d-grid" id="getting-started-2">
+    <div class="row">
+      <div class="d-flex flex-column align-items-center">
+        <p class="fs-2 fw-regular">
+          Getting Started
+        </p>
+        <p class="fs-6 fw-lighter text-center mb-0">
+          Select the modules you doing this semester. Select a minimum of three (3).
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="d-md-none d-flex justify-content-center">
+        <div class="border border-secondary border-1 w-50"></div>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <multiselect :search-field-id="'multiselect-searchfield'" :dropdown-id="'dropdown-items'" :items="moduleItems"
+        :checkbox-type="'checkbox'" :limit="5" :return-type="'none'" :action="'module-selection'"></multiselect>
+      <div style="height: 25vh;"></div>
+    </div>
+  </div>
 </div>
-{% endblock %}

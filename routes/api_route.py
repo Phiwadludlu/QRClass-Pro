@@ -1,10 +1,15 @@
 from flask import Blueprint
-from controllers.mutliselect_controller import getAllItems, handleMultiSelect, handleSearchField
+from controllers import lecturer_controller as lc
+from controllers import multiselect_controller as mc
+from controllers import searchfield_controller as sfc
+from controllers import test_db as ddb
 from controllers.core_controller import lecturer_sign_up, student_sign_up
 
 api = Blueprint("api_routes",__name__)
 
-# Multiselect Control - by m-mngadi
-api.get("/dropdown-items")(getAllItems)
-api.post("/dropdown-config") (handleMultiSelect)
-api.post("/searchfield-config") (handleSearchField)
+api.get("/qualification/all")(ddb.getAllQualifications)
+api.get("/module/all")(ddb.getAllModules)
+api.get("/attendance/all")(ddb.getAllAttendance)
+
+api.post("/config/multiselect") (mc.handleTableByModule)
+api.post("/config/searchfield") (sfc.handleTableByStudentNumber)
