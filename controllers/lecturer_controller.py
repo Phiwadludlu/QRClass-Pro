@@ -15,3 +15,12 @@ def activeQR():
 
 def generateQR():
     return render_template('layouts/lecturer/GenerateQR_layout.html')
+
+def showGeneratedQR():
+    return render_template('layouts/lecturer/QRGenerated_layout.html')
+
+def lecturerMain():
+    return render_template('layouts/lecturer/LecturerMain_layout.html', user_data={"username":"Lindelweyizizwe Manqele"})
+
+def manage():
+    return render_template('layouts/Manage_layout.html', modules=ddb.getAllModules())

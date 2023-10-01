@@ -1,13 +1,82 @@
 {% extends "base.html" %}
 
 {% block title %}
-    
+
 {% endblock %}
 
 {% block content %}
+{% include "components/navbar/lecturer-navbar.html" %}
 <div class="container-lg px-4">
-    <!--
-        Write code for the layout here.
-    -->
+    <div class="row">
+        <p class="fs-2 fw-bold">Hello {{ user_data.username}} !</p>
+    </div>
+    <div class="container px-0">
+        <div class="row mb-3 px-0">
+            <a href="qr/generate" class="d-flex align-items-center link-underline link-underline-opacity-0 text-dark">
+                <div class="card w-100 px-0">
+                    <div class="card-body d-flex bg-secondary-subtle">
+                        <div class="col-1 d-flex align-items-center">
+                            <span class="material-symbols-outlined">
+                                <span class="material-symbols-outlined">
+                                    format_list_bulleted
+                                </span>
+                            </span>
+                        </div>
+                        <div class="col d-flex align-items-center justify-content-start">
+                            <span class="card-title fs-3 mb-0">Generate QR Code</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="row mb-3">
+            <a href="qr/active" class="d-flex align-items-center link-underline link-underline-opacity-0 text-dark">
+                <div class="card w-100 px-0">
+                    <div class="card-body d-flex bg-secondary-subtle">
+                        <div class="col-1 d-flex align-items-center">
+                            <span class="material-symbols-outlined">
+                                article
+                            </span>
+                        </div>
+                        <div class="col d-flex align-items-center justify-content-start">
+                            <span class="card-title fs-3 mb-0">Active QR Codes</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="row mb-3">
+            <a href="attendance" class="d-flex align-items-center link-underline link-underline-opacity-0 text-dark">
+                <div class="card w-100 px-0">
+                    <div class="card-body d-flex bg-secondary-subtle">
+                        <div class="col-1 d-flex align-items-center">
+                            <span class="material-symbols-outlined">
+                                view_module
+                            </span>
+                        </div>
+                        <div class="col d-flex align-items-center justify-content-start">
+                            <span class="card-title fs-3 mb-0">View Attendance</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="row mb-3">
+            <a href="manage" class="d-flex align-items-center link-underline link-underline-opacity-0 text-dark">
+                <div class="card w-100 px-0">
+                    <div class="card-body d-flex bg-secondary-subtle">
+                        <div class="col-1 d-flex align-items-center">
+                            <span class="material-symbols-outlined">
+                                settings
+                            </span>
+                        </div>
+                        <div class="col d-flex align-items-center justify-content-start">
+                            <span class="card-title fs-3 mb-0">Manage</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
 {% endblock %}

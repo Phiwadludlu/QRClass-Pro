@@ -1,13 +1,44 @@
 {% extends "base.html" %}
 
 {% block title %}
-    | Generated QR
+| Generated QR
 {% endblock %}
 
 {% block content %}
-<div class="container-lg px-4">
-    <!--
-        Write code for the layout here.
-    -->
+<div class="container-lg">
+    <div class="d-flex flex-row">
+        <a href="/lecturer/" role="button" class="btn bg-transparent rounded border border-0">
+            <span class="material-symbols-outlined">
+                home
+            </span>
+        </a>
+        <div class="col d-block pe-3 me-3">
+            <p class="fs-3 fw-medium mb-0 text-center">
+                Generate QR
+            </p>
+            <div class="d-md-none d-flex justify-content-center w-100">
+                <div class="border border-secondary border-1 w-50"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row mt-3">
+            <p class="fw-lighter text-center">
+                The QR code has been generated. It will be valid until [time_from_data]
+            </p>
+        </div>
+        <div class="container d-flex justify-content-center">
+            <img class="img-fluid" src="/static/qr-test.png" alt="generated qr code.">
+        </div>
+        <div class="row">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn d-flex align-items-center btn-outline-secondary">Share
+                    <span class="material-symbols-outlined">
+                        share
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

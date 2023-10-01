@@ -1,13 +1,32 @@
 {% extends "base.html" %}
-
+{% import "macros/__moduletile__.html" as tile %}
 {% block title %}
-    
+
 {% endblock %}
 
 {% block content %}
+{% include "components/navbar/student-navbar.html" %}
 <div class="container-lg px-4">
-    <!--
-        Write code for the layout here.
-    -->
+    <div class="row">
+        <p class="fs-2 fw-bold">Hello {{ user_data.username}} !</p>
+    </div>
+    <div class="row">
+        <p class="fs-6 fw-lighter text-secondary">Today's classes</p>
+    </div>
+    <div class="container">
+        {% for item in user_data.timetable %}
+        <div class="row mb-3">
+            {{ tile.self(item.module, item.time, item.status) }}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <a href="attendance" class="d-flex align-items-center link-underline link-underline-opacity-0 text-dark">
+            <p class="mb-0 fs-3">View Attendance</p>
+            <span class="material-symbols-outlined">
+                navigate_next
+            </span>
+        </a>
+    </div>
 </div>
 {% endblock %}

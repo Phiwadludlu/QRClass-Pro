@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% import "macros/__moduletable__ .html" as moduletable %}
+
+{% block title %}
+| Manage Modules
+{% endblock %}
+
+{% block content %}
+<div class="container-lg h-100">
+    <div class="d-flex flex-row">
+        <a href="/lecturer/" role="button" class="btn bg-transparent rounded border border-0">
+            <span class="material-symbols-outlined">
+                arrow_back_ios_new
+            </span>
+        </a>
+        <div class="col d-block pe-3 me-3">
+            <p class="fs-3 fw-medium mb-0 text-center">
+                Manage
+            </p>
+            <div class="d-md-none d-flex justify-content-center w-100">
+                <div class="border border-secondary border-1 w-50"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-2">
+        <div class="d-flex flex-row justify-content-between">
+            <div class="d-flex">
+                <p class="fs-4 fw-lighter">Your modules</p>
+            </div>
+            <div class="d-flex justify-content-end gap-2"><a role="button" href="#" class="btn"><span
+                        class="material-symbols-outlined"> edit </span></a><a role="button" href="#" class="btn"><span
+                        class="material-symbols-outlined"> add </span></a></div>
+        </div>
+        <div class="table-responsive h-100" id="table-area">
+            {{ moduletable.self(modules) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,13 +1,120 @@
 {% extends "base.html" %}
 
 {% block title %}
-    | Scan QR
+| Scan QR
 {% endblock %}
 
 {% block content %}
-<div class="container-lg px-4">
-    <!--
-        Write code for the layout here.
-    -->
+<div class="container-lg h-100">
+    <div id="alert-section"></div>
+    <div class="d-flex flex-row">
+        <a href="/student/" role="button" class="btn bg-transparent rounded border border-0">
+            <span class="material-symbols-outlined">
+                arrow_back_ios_new
+            </span>
+        </a>
+        <div class="col d-block pe-3 me-3">
+            <p class="fs-3 fw-medium mb-0 text-center">
+                Scan QR
+            </p>
+            <div class="d-md-none d-flex justify-content-center w-100">
+                <div class="border border-secondary border-1 w-50"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container h-100 d-flex flex-column align-items-center mt-3 gap-2">
+        <div class="row">
+            <p class="fw-lighter text-center">
+                Align the QR code within frame.
+            </p>
+            <div id="qr-result"></div>
+        </div>
+        <div class="d-flex flex-column justify-content-center overflow-x-hidden">
+            <video id="video" style="width:250px;height:250px; object-fit: cover;"></video>
+        </div>
+        <div class="d-flex justify-content-center"><button id="picture" type="button"
+                class="btn justify-content-center d-flex align-items-center btn-outline-secondary">Scan
+                <span class="material-symbols-outlined"> photo_camera </span></button>
+        </div>
+        <canvas id="canvas" width="250" height="250"></canvas>
+    </div>
+
 </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.0.0/dist/jsQR.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const videoElement = document.getElementById("video");
+        const qrResult = document.getElementById("qr-result");
+        const buttonScan = document.getElementById("picture");
+
+        // Function to start the camera stream
+        function startCamera() {
+            navigator.mediaDevices
+                .getUserMedia({ video: { facingMode: "environment" } }) // Use the rear-facing camera
+                .then(function (stream) {
+                    videoElement.srcObject = stream;
+                    videoElement.play();
+                    scanQRCode();
+                })
+                .catch(function (error) {
+                    console.error("Error accessing the camera:", error);
+                });
+        }
+
+        // Function to continuously scan for QR codes
+        function scanQRCode() {
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+            const videoWidth = videoElement.videoWidth;
+            const videoHeight = videoElement.videoHeight;
+            canvas.width = videoWidth;
+            canvas.height = videoHeight;
+
+            const alertPlaceholder = document.querySelector('div#qr-result');
+            let timeoutId;
+            
+            const scanFrame = () => {
+                context.drawImage(videoElement, 0, 0, videoWidth, videoHeight);
+                const imageData = context.getImageData(0, 0, videoWidth, videoHeight);
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                alertPlaceholder.innerHTML = '';
+
+                if (code) {
+                    qrResult.innerText = code.data;
+                } else {
+                    const appendAlert = (message, type) => {
+                        const wrapper = document.createElement('div')
+                        wrapper.innerHTML = [
+                            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                            `   <div>${message}</div>`,
+                            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                            '</div>'
+                        ].join('')
+                        alertPlaceholder.append(wrapper);
+                    }
+
+                    appendAlert('Invalid QR code.', 'warning');
+                }
+            };
+
+            requestAnimationFrame(scanFrame);
+        }
+
+
+        // Start the camera when the page loads
+        startCamera();
+
+        buttonScan.addEventListener("click", () => {
+            scanQRCode();
+        })
+
+    });
+</script>
+
+
 {% endblock %}

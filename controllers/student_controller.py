@@ -7,3 +7,10 @@ def gettingStarted():
 def studentAttendance():
     auth_user_id = "22175060"
     return render_template("layouts/student/StudentAttendance_layout.html", attendance_data=ddb.getStudentAttendance(auth_user_id))
+
+def StudentMain():
+    return render_template("layouts/student/StudentMain_layout.html",
+    user_data={"username":"Gugulethu Duma","qualification":"BINCT1", "timetable": ddb.getUserTimetable()})
+
+def scanQR():
+    return render_template("layouts/student/ScanQR_layout.html")

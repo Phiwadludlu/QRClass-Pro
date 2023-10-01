@@ -8,7 +8,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </a>
                 </div>
-                <div class="container-fluid me-5 d-flex justify-content-md-start justify-content-center">
+                <div class="container-fluid {% if variant!='student' %} me-5 {% endif %} d-flex justify-content-md-start justify-content-center">
                     <div class="d-grid gap-1">
                         <a class="fs-3 fw-normal text-black link-underline link-underline-opacity-0" href="/">QRClassPro</a>
                         <div class="d-md-none d-flex justify-content-center w-100">
@@ -55,7 +55,7 @@
                 <div class="d-md-none"></div>
                 {% else %}
                 <div class="d-md-none d-flex justify-content-end"> <!-- TODO: QR Code Scanner redirect -->
-                    <a class="navbar-toggler border border-0" href="#" role="button">
+                    <a class="navbar-toggler border border-0" href="qr/scan" role="button">
                         <span class="material-symbols-outlined">qr_code_scanner</span>
                     </a>
                 </div>

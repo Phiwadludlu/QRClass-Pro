@@ -1,9 +1,9 @@
 def getAllModules():
-    return [{'id':'SEN301','name' : 'Software Engineering', 'code' : 'SFEN301', 'type':'module'}, 
-            {'id':'PRJB301','name' : 'Project B', 'code' : 'PRJB301', 'type':'module'}, 
-            {'id':'MCHI301','name' : 'Machine Intelligence', 'code' : 'MCHI301', 'type':'module'}, 
-            {'id':'PJMN301','name' : 'Project Management', 'code' : 'PJMN301', 'type':'module'},
-            {'id':'PBDV301','name' : 'Platform Based Programming', 'code' : 'PBDV301', 'type':'module'}]
+    return [{'id':'SEN301','name' : 'Software Engineering', 'code' : 'SFEN301', 'type':'module', "sessions": []}, 
+            {'id':'PRJB301','name' : 'Project B', 'code' : 'PRJB301', 'type':'module', "sessions": []}, 
+            {'id':'MCHI301','name' : 'Machine Intelligence', 'code' : 'MCHI301', 'type':'module', "sessions": []}, 
+            {'id':'PJMN301','name' : 'Project Management', 'code' : 'PJMN301', 'type':'module', "sessions": []},
+            {'id':'PBDV301','name' : 'Platform Based Programming', 'code' : 'PBDV301', 'type':'module', "sessions": []}]
 
 def getAllAttendance():
     return [{"code":"MCHI301","module":"Machine Intelligence III", "date":"30/09/2023","time":" 02:37 PM","status":"Present","student_id":"22175060"},
@@ -29,4 +29,7 @@ def getAllQR():
 def getAllQualifications():
     return [{'id':'BINCT1', 'name' : 'BACHELOR OF INF & COM TECHNOLOGY', 'code' : 'BINCT1', 'type':'qualification'},
             {'id':'DIIAD1','name':'DIPLOMA IN ICT APPLICATIONS DEVELOPMENT','code' : 'DIIAD1', 'type':'qualification'}]
+
+def getUserTimetable():
+    return [{"module":"BSIT301","time":"08:00 AM","status":"Absent"},{"module":"SFEN301","time":"10:00 AM","status":"Present"},{"module":"PRJB301","time":"12:00 PM","status":"Upcoming"}]
 
