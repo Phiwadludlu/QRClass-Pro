@@ -54,7 +54,7 @@ def lecturer_sign_up():
             lecturer_role = Role.query.filter_by(id=3).first_or_404()
 
             #Add user to DB logic here
-            new_user = User(email= register_lecturer_form.email.data, password=hash_password(register_lecturer_form.password.data), active=True )
+            new_user = User(email= register_lecturer_form.email.data, password=hash_password(register_lecturer_form.password.data), active=True)
             new_user.fs_uniquifier = new_user.get_auth_token()
             new_user.is_active = True
             new_user.roles.append(lecturer_role)
@@ -84,7 +84,7 @@ def student_sign_up():
             student_role = Role.query.filter_by(id=2).first_or_404()
 
             #Add user to DB logic here
-            new_user = User(email= register_student_form.email.data, password=hash_password(register_student_form.password.data), active=True )
+            new_user = User(email= register_student_form.email.data, password=hash_password(register_student_form.password.data), active=True)
             new_user.fs_uniquifier = new_user.get_auth_token()
             new_user.is_active = True
             new_user.roles.append(student_role)

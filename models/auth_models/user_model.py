@@ -8,12 +8,16 @@ from sqlalchemy.orm import relationship, backref
 
 
 class User(db.Model, fsqla.FsUserMixin):
+
     """Stores user information such as email username and password"""
+
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     is_active = db.Column(db.Boolean, default=False)
+    #is_student = db.Column(db.Boolean, nullable=False, default=False)
+    #is_lecturer = db.Column(db.Boolean, nullable=False, default=False)
     password = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now())
 
@@ -28,3 +32,6 @@ class User(db.Model, fsqla.FsUserMixin):
     #Relationship with the roles table
     roles = db.relationship('Role', secondary='roles_users', backref=backref("users", lazy="dynamic"))
 
+    
+
+        

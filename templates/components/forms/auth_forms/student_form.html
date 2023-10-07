@@ -1,4 +1,5 @@
 {% extends 'auth/register.html' %}
+{% block title %}| Register{% endblock %}
 {%block form%}
 <form id="student" action="{{ url_for('core_routes.student_sign_up') }}" method="post" name="register_user_form"
 class="container mx-auto px-3 ">
@@ -19,6 +20,7 @@ placeholder="Password") }}
 {{ render_field(register_student_form.submit, class = "button mt-3 register-button")
 }}
 </form>
+
 <script>
 
     // Initially, set the 'Student' button as active (grey)
