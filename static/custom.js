@@ -39,7 +39,7 @@ const app = Vue.createApp({
             }
         },
     },
-    created () {
+    created() {
         this.fetchModuleItems();
         this.fetchQualificationItems();
     }
@@ -161,7 +161,7 @@ app.component('multiselect', {
         },
         handleTagClick(tag) {
             // Remove the clicked tag from currentTags
-            console.log("handleTagClick -> [type]",this.returnType);
+            console.log("handleTagClick -> [type]", this.returnType);
             if (this.returnType === "module-table") {
                 const renderTo = document.getElementById("table-area");
                 renderTo.innerHTML = '';
@@ -221,6 +221,83 @@ app.component('searchfield', {
             const renderTo = document.getElementById("table-area");
             renderTo.innerHTML = '';
         }
+    },
+});
+
+app.component('numberpicker', {
+    template: '#numberpicker-template',
+    props: {
+        initialValue: {
+            type: Number,
+            default: 1,
+        },
+    },
+    data() {
+        return {
+            value: this.initialValue,
+            selectedDuration: 'min', // Default selected duration
+        };
+    },
+    computed: {
+        maxValue() {
+            // Set the max value based on the selected duration
+            switch (this.selectedDuration) {
+                case 'hr':
+                    return 24;
+                case 'day':
+                    return 14;
+                case 'min':
+                default:
+                    return 60;
+            }
+        },
+    },
+    methods: {
+        decrement() {
+            if (this.value > 1) {
+                this.value--;
+            }
+        },
+        increment() {
+            if (this.value < this.maxValue) {
+                this.value++;
+            }
+        },
+        updateValue(event) {
+            const newValue = parseInt(event.target.value, 10);
+            if (!isNaN(newValue) && newValue >= 1 && newValue <= this.maxValue) {
+                this.value = newValue;
+            }
+        },
+        resetValue() {
+            // Reset the value to 1 if it's above the max value for the selected duration
+            if (this.value > this.maxValue) {
+                this.value = 1;
+            }
+        },
+    },
+});
+
+app.component('sessionpicker', {
+    template: '#session-template',
+    data() {
+        const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const currentDayIndex = new Date().getDay(); // 0 is Sunday, 1 is Monday, and so on.
+        let defaultDay = daysOfWeek[currentDayIndex];
+
+        // Check if it's a weekend (Sunday or Saturday) and default to Monday
+        if (currentDayIndex === 0 || currentDayIndex === 6) {
+            defaultDay = "Monday";
+        }
+
+        return {
+            selectedDay: defaultDay,
+            selectedTime: "8:00 AM",
+            hours: [
+                "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
+                "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"
+            ]
+        };
     },
 });
 

@@ -4,6 +4,16 @@
 | Generate QR
 {% endblock %}
 
+{% block style %}
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container-lg">
     <div class="d-flex flex-row">
@@ -29,62 +39,12 @@
                 :action="'module-filter'"></multiselect>
         </div>
         <div class="row">
-            <p class="fs-5 fw-lighter">Session</p>
-            <div class="input-group mb-3">
-                <select class="form-select" aria-label="Sessions">
-                    <option value="09:00 AM">09:00 AM</option>
-                    <option value="08:00 AM">08:00 AM</option>
-                    <option value="10:00 AM">10:00 AM</option>
-                    <option value="11:00 AM">11:00 AM</option>
-                    <option value="12:00 AM">12:00 AM</option>
-                    <option value="01:00 PM">01:00 PM</option>
-                    <option value="02:00 PM">02:00 PM</option>
-                    <option value="03:00 PM">03:00 PM</option>
-                    <option value="04:00 PM">04:00 PM</option>
-                    <option value="05:00 PM">05:00 PM</option>
-                </select>
-            </div>
+            <p class="fs-5 fw-lighter mb-0">Session</p>
+            <sessionpicker></sessionpicker>
         </div>
-        <div class="row">
-            <p class="fs-5 fw-lighter">Expire at (HH:MM)</p>
-            <div class="input-group mb-3">
-                <div class="input-group mb-3">
-                    <select class="form-select" aria-label="Hours">
-                        <option value="01">01</option>
-                        <option value="02">02</option>
-                        <option value="03">03</option>
-                        <option value="04">04</option>
-                        <option value="05">05</option>
-                        <option value="06">06</option>
-                        <option value="07">07</option>
-                        <option value="08">08</option>
-                        <option value="09">09</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                    </select>
-                    <span class="input-group-text">:</span>
-                    <select class="form-select" aria-label="Minutes">
-                        <option value="00">00</option>
-                        <option value="05">05</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="25">25</option>
-                        <option value="30">30</option>
-                        <option value="35">35</option>
-                        <option value="40">40</option>
-                        <option value="45">45</option>
-                        <option value="50">50</option>
-                        <option value="55">55</option>
-                    </select>
-                    <span class="input-group-text"></span>
-                    <select class="form-select" aria-label="AM/PM">
-                        <option value="AM">AM</option>
-                        <option value="PM">PM</option>
-                    </select>
-                </div>
-            </div>
+        <div class="row mb-3">
+            <p class="fs-5 fw-lighter">Expires</p>
+            <numberpicker></numberpicker>
         </div>
         <div class="row">
             <div class="d-flex justify-content-center">
@@ -97,6 +57,57 @@
 </div>
 {% endblock %}
 
-{% block script %} 
+{% block script %}
+<template id="numberpicker-template">
+    <div class="d-flex flex-column">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="d-flex flex-row flex-nowrap justify-content-center mb-3">
+                    <button role="button" class="btn border rounded-circle" style="width: 48px; height: 48px;"
+                        @click="decrement">
+                        -
+                    </button>
+                    <input id="expiration-value" type="number" :value="value" class="form-control text-center"
+                        :max="maxValue" min="1" style="width: 48px; height: 48px;" @input="updateValue" />
+                    <button role="button" class="btn border rounded-circle" style="width: 48px; height: 48px;"
+                        @click="increment">
+                        +
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <select class="form-select" aria-label="Duration" v-model="selectedDuration" @change="resetValue">
+                    <option value="min">minute(s)</option>
+                    <option value="hr">hour(s)</option>
+                    <option value="day">day(s)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="session-template">
+    <div class="d-flex flex-column gap-3">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="dayDropdown" class="form-label fw-lighter">Select a day:</label>
+                <select class="form-select" id="dayDropdown" v-model="selectedDay">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="timeDropdown" class="form-label fw-lighter">Select a time slot:</label>
+                <select class="form-select" id="timeDropdown" v-model="selectedTime">
+                    <option v-for="hour in hours" :key="hour" :value="hour">{{'{{ hour }}'}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</template>
+
 <script src="/static/custom.js" type="text/javascript"></script>
 {% endblock %}
