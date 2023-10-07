@@ -252,6 +252,14 @@ app.component('numberpicker', {
             }
         },
     },
+    watch: {
+        value(newVal, oldVal) {
+            // When the value changes, validate it against the max value
+            if (newVal > this.maxValue) {
+                this.value = oldVal; // Revert to the old value if it exceeds the max
+            }
+        },
+    },
     methods: {
         decrement() {
             if (this.value > 1) {
@@ -265,7 +273,7 @@ app.component('numberpicker', {
         },
         updateValue(event) {
             const newValue = parseInt(event.target.value, 10);
-            if (!isNaN(newValue) && newValue >= 1 && newValue <= this.maxValue) {
+            if (!isNaN(newValue) && newValue >= 1) {
                 this.value = newValue;
             }
         },
