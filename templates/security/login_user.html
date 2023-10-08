@@ -4,7 +4,9 @@
 prop_next %}
 
 {% block content %}
-{% include "security/_messages.html" %}
+<div class="toast-container toast-container position-fixed bottom-0 end-0 p-3">
+  {% include "security/_messages.html" %}
+</div>
 <div class="d-flex align-items-center h-100">
   <div class="container-lg">
     <div class="d-flex flex-column align-items-center">
@@ -20,13 +22,22 @@ prop_next %}
       <div class="d-flex flex-column">
         {{ login_user_form.hidden_tag() }}
         {{ render_form_errors(login_user_form) }}
-        {% if "email" in identity_attributes %}{{ render_field_with_errors(login_user_form.email, class="form-control
+
+        {% if "email" in identity_attributes %}
+
+        {{ render_field_with_errors(login_user_form.email, class="form-control
         col-lg-4 col-sm-8",
-        placeholder="Email") }}{% endif %}
+        placeholder="Email") }}
+
+        {% endif %}
+
         {% if login_user_form.username and "username" in identity_attributes %}
+
         {% if "email" in identity_attributes %}{% endif %}
         {{ render_field_with_errors(login_user_form.username, class="form-control col-lg-4 col-sm-8") }}
+
         {% endif %}
+
         {{ render_field_with_errors(login_user_form.password, class="form-control col-lg-4 col-sm-8",
         placeholder="Password") }}
         <div class="row">
@@ -68,4 +79,27 @@ prop_next %}
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+  const toastLiveList = document.querySelectorAll('div.toast');
+
+  if (toastLiveList.length > 0) {
+    toastLiveList.forEach((toast, index) => {
+      const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toast);
+
+      // Initially hide all the toasts
+      toastBootstrap.hide();
+
+      // Calculate the delay for showing each toast based on its position (index)
+      const delay = (index + 1) * 300; // 2000 milliseconds (2 seconds) delay for each toast
+
+      // Use setTimeout to show each toast after the specified delay
+      setTimeout(() => {
+        toastBootstrap.show(); // Show the toast
+      }, delay);
+    });
+  }
+</script>
 {% endblock %}

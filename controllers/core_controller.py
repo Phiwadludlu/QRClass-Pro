@@ -19,7 +19,7 @@ from forms.auth_forms.sign_up_form import StudentSignUp,LecturerSignUp, StudentR
 
 
 
-
+@anonymous_user_required
 def index():
     return render_template('layouts/LandingPage_layout.html')
 
