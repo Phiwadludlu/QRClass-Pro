@@ -4,6 +4,8 @@ from models.session_model import ModuleSession
 
 class QRService:
 
+    """A service for generating unique qrs"""
+
     _code = ""
 
     def __init__(self, session:ModuleSession) -> None:
