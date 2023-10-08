@@ -10,6 +10,7 @@ class Module (db.Model):
 
     id = Column(Integer(), primary_key=True)
     module_name = Column(String(255), nullable=False)
+    module_code = Column(String(25), nullable=False)
     created_at = Column(DateTime(), default=datetime.now())
     modified_at = Column(DateTime(), default=datetime.now())
     lecutrer_id = Column(Integer(), ForeignKey("lecturers.id"))

@@ -16,6 +16,12 @@ class ModuleSession (db.Model):
     modified_at = Column(DateTime(), default= datetime.now())
     module_id = Column(Integer(), ForeignKey("modules.id"))
 
+    qr_id = Column(Integer(), ForeignKey('qr.id'))
+    
     #Relationships
 
     module = db.relationship('Module',back_populates='session')
+
+    timeslot = db.relationship('TimeSlot', back_populates='module_session')
+
+    qr = db.relationship('QR', back_populates='session')
