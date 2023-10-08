@@ -28,7 +28,7 @@ def showGeneratedQR():
 
 @roles_required('lecturer')
 def lecturerMain():
-    return render_template('layouts/lecturer/LecturerMain_layout.html', user_data={"username":"Lindelweyizizwe Manqele"})
+    return render_template('layouts/lecturer/LecturerMain_layout.html')
 
 @roles_required('lecturer')
 def manage():

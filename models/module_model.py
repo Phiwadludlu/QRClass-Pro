@@ -13,7 +13,7 @@ class Module (db.Model):
     module_code = Column(String(25), nullable=False)
     created_at = Column(DateTime(), default=datetime.now())
     modified_at = Column(DateTime(), default=datetime.now())
-    lecutrer_id = Column(Integer(), ForeignKey("lecturers.id"))
+    lecturer_id = Column(Integer(), ForeignKey("lecturers.id"))
 
 
     #Relationship

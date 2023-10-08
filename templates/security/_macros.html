@@ -13,7 +13,7 @@
 {% endmacro %}
 
 {% macro render_field(field) %}
-<div class="" id="{{ field.id|default('fs-field') }}">{{ field(**kwargs)|safe }}</div>
+<div class="row" id="{{ field.id|default('fs-field') }}">{{ field(**kwargs)|safe }}</div>
 {% endmacro %}
 
 {% macro render_field_errors(field) %}

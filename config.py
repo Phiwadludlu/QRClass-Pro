@@ -1,7 +1,6 @@
 import os
 import dotenv
 
-
 #Loading environment variables
 dotenv.load_dotenv()
 
@@ -31,3 +30,4 @@ SECURITY_REGISTERABLE = False
 SECURITY_SEND_REGISTER_EMAIL = False
 SECURITY_EMAIL_VALIDATOR_ARGS = {"check_deliverability": False}
 SECURITY_POST_LOGIN_VIEW = "/redirect-proxy"
+SECURITY_UNAUTHORIZED_VIEW = "/redirect-proxy"

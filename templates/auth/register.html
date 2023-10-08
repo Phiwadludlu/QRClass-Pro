@@ -1,123 +1,23 @@
-{% extends "auth/base.html" %}
+{% extends "base.html" %}
 {% from "security/_macros.html" import render_field_with_errors, render_field, render_form_errors %}
-
 {% block content %}
-<style>
-    body {
-        background-color: white;
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-
-    .container {
-        text-align: center;
-    }
-
-    .button-group {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 10px;
-    }
-
-    .button {
-        background-color: white;
-        /* Initially set to white */
-        color: #333;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin: 0 10px;
-        text-decoration: none;
-    }
-
-    .button.active {
-        background-color: grey;
-        /* When active, set to grey */
-        color: white;
-    }
-
-    .input-field {
-        margin: 10px 0;
-        padding: 10px;
-        width: 50%;
-        /* Set to 50% width */
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    .input-group {
-        display: flex;
-        align-items: center;
-        margin: 10px 0;
-        padding: 10px;
-        width: 80%;
-    
-
-
-    }
-
-    .input-group-text {
-        background-color: #f1f1f1;
-        border: 1px solid #ccc;
-    }
-
-    .login-link {
-        margin-top: 10px;
-        font-size: 14px;
-    }
-
-    .underline {
-        border-bottom: grey;
-        border-bottom-style: solid;
-        border-bottom-width: 2px;
-        width: 10%;
-        justify-content: center
-    }
-
-    .register-button {
-        background-color: grey;
-        color: white;
-
-    }
-
-    .register-button:hover {
-        background-color: lightgrey;
-        color: black;
-    }
-</style>
-<div class="container">
-    {% include "security/_messages.html" %}
-    <div class="container">
-
-        <h1>Sign Up</h1>
-        <p class="text-muted">Create an account using your institutions credentials</p>
-        <div class="button-group">
-            <a href="{{url_for('core_routes.student_sign_up')}}" class="button"
-                 data-user="student">Student</a>
-            <a href="{{url_for('core_routes.lecturer_sign_up')}}" class="button"
-                data-user="lecturer">Lecturer</a>
+<div class="d-flex align-items-center h-100">
+    <div class="container-lg">
+        {% include "security/_messages.html" %}
+        <div class="d-flex flex-column align-items-center">
+            <p class="fs-3 fw-medium">Sign Up</p>
+            <p class="fs-6 fw-lighter text-center">
+                Create an account using your institutions credentials
+            </p>
+            <div class="d-md-none d-flex justify-content-center w-100 mb-2">
+                <div class="border border-secondary border-1 w-50"></div>
+            </div>
         </div>
-        <div class="container underline mb-3">
+        <div class="d-flex flex-column">{%block form %} {% endblock %}</div>
+        <div class="d-flex align-items-center justify-content-center gap-2">
+            <p class="fw-medium mb-0">Have an account?</p>
+            <a class="text-secondary fw-medium link-underline link-underline-opacity-0" href="/login">Login</a>
         </div>
-        <div  hx-boost="true" id="signup-form">
-
-            <!--Form-->
-            {%block form %} {% endblock %}
-
-    
-            
-
-
-        </div>
-        <p class="text text-muted mt-3">Have an account? <a href="/login">Login</a></p>
-
     </div>
-
-    
-    {% endblock content %}
+</div>
+{% endblock %}
