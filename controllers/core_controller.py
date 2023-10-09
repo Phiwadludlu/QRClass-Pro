@@ -1,6 +1,6 @@
 
 """The controllers module is for business logic"""
-from flask import redirect, render_template,request, url_for,flash
+from flask import redirect, render_template,request, url_for,flash, session
 from models.auth_models.roles_model import Role
 from models import Lecturer,Student
 import services
@@ -8,7 +8,8 @@ import services
 from flask_security import auth_required
 from flask_security.registerable import register_user
 from flask_security.utils import hash_password
-from flask_security.decorators import anonymous_user_required
+from flask_security.decorators import anonymous_user_required, auth_required
+
 
 from models import db
 from models.auth_models.user_model import User
@@ -18,7 +19,7 @@ from forms.auth_forms.sign_up_form import StudentSignUp,LecturerSignUp, StudentR
 
 
 
-
+@anonymous_user_required
 def index():
     return render_template('layouts/LandingPage_layout.html')
 
@@ -54,7 +55,7 @@ def lecturer_sign_up():
             lecturer_role = Role.query.filter_by(id=3).first_or_404()
 
             #Add user to DB logic here
-            new_user = User(email= register_lecturer_form.email.data, password=hash_password(register_lecturer_form.password.data), active=True )
+            new_user = User(email= register_lecturer_form.email.data, password=hash_password(register_lecturer_form.password.data), active=True)
             new_user.fs_uniquifier = new_user.get_auth_token()
             new_user.is_active = True
             new_user.roles.append(lecturer_role)
@@ -84,7 +85,7 @@ def student_sign_up():
             student_role = Role.query.filter_by(id=2).first_or_404()
 
             #Add user to DB logic here
-            new_user = User(email= register_student_form.email.data, password=hash_password(register_student_form.password.data), active=True )
+            new_user = User(email= register_student_form.email.data, password=hash_password(register_student_form.password.data), active=True)
             new_user.fs_uniquifier = new_user.get_auth_token()
             new_user.is_active = True
             new_user.roles.append(student_role)
@@ -100,3 +101,23 @@ def student_sign_up():
             return redirect(url_for("security.login"))
        
     return render_template("components/forms/auth_forms/student_form.html",register_student_form=register_student_form )
+
+@auth_required()
+def proxy_redirect():
+
+    user_id = session["_user_id"]
+    current_user = User.query.filter_by(fs_uniquifier=user_id).first()
+
+
+    if current_user.has_role('student'):
+
+        return redirect(url_for("students.StudentMain"))
+    
+    elif current_user.has_role('lecturer'):
+        
+        return redirect(url_for("lecturers.lecturerMain"))
+        
+
+   
+
+    

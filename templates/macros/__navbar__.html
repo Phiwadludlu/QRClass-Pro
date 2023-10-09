@@ -10,7 +10,7 @@
                 </div>
                 <div class="container-fluid {% if variant!='student' %} me-5 {% endif %} d-flex justify-content-md-start justify-content-center">
                     <div class="d-grid gap-1">
-                        <a class="fs-3 fw-normal text-black link-underline link-underline-opacity-0" href="/">QRClassPro</a>
+                        <a class="fs-3 fw-normal text-black link-underline link-underline-opacity-0" href="./">QRClassPro</a>
                         <div class="d-md-none d-flex justify-content-center w-100">
                             <div class="border border-secondary border-1 w-50"></div>
                         </div>
@@ -25,9 +25,9 @@
                                 <span class="material-symbols-outlined d-flex justify-content-center align-items-center rounded-circle bg-secondary-subtle p-3">person</span>
                             </div>
                             <div class="col d-md-flex flex-column justify-content-md-center">
-                                <p class="fw-normal fs-5 mb-0">{{ data.username }}</p>
+                                <p class="fw-normal fs-5 mb-0">{{ data.email }}</p>
                                 {% if variant == 'student' %}
-                                <p class="d-md-none fw-lighter fs-6 mb-0">{{ data.qualification }}</p>
+                                <p class="d-md-none fw-lighter fs-6 mb-0">{{ data.student.qualification.name }}</p>
                                 {% endif %}
                             </div>
                         </div>

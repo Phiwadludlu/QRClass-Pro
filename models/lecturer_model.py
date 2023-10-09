@@ -14,6 +14,9 @@ class Lecturer(db.Model):
     modified = db.Column(db.DateTime(), default=datetime.now)
     created_at = db.Column(db.DateTime(), default = datetime.now)
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
+    
 
     # Define the back-reference to User
     user = db.relationship('User', back_populates='lecturer')
+
+    module = db.relationship('Module', backref=db.backref("module"))
