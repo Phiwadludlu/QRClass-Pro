@@ -4,7 +4,7 @@ from models.session_model import ModuleSession
 
 class QRService:
 
-    """A service for generating unique qrs"""
+    """A service for generating unique QRs"""
 
     _code = ""
 
