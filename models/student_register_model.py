@@ -8,8 +8,8 @@ class StudentRegister(db.Model):
 
     id = Column(Integer(), primary_key=True)
     module_id = Column(Integer(), ForeignKey('modules.id'))
-    year = Column(Date(), nullable=False)
-    semester = Column(String(255), nullable=False)
+    year = Column(Integer(), nullable=False)
+    semester = Column(Integer(), nullable=False)
 
     #Relationships
     #Relationship with student

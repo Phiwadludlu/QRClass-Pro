@@ -14,9 +14,9 @@
         <p class="fs-6 fw-lighter text-secondary">Today's classes</p>
     </div>
     <div class="container">
-        {% for item in user_data.timetable %}
+        {% for item in timetable %}
         <div class="row mb-3">
-            {{ tile.self(item.module, item.time, item.status) }}
+            {{ tile.self(item.module_name, item.time, item.status) }}
         </div>
         {% endfor %}
     </div>

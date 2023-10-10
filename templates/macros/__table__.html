@@ -13,11 +13,11 @@
     <tbody class="table-group-divider">
         {% for item in data %}
         <tr>
-            <th scope="row">{{ item.student_id }}</th>
-            <td>{{ item.module }}</td>
-            <td>{{ item.date }}</td>
-            <td>{{ item.time }}</td>
-            <td>{{ item.status }}</td>
+            <th scope="row">{{ item.student_number }}</th>
+            <td>{{ item.module_name }}</td>
+            <td>{{ item.attendance_date }}</td>
+            <td>{{ item.attendance_time }}</td>
+            <td>{{ item.attendance_status }}</td>
         </tr>
         {% endfor %}
     </tbody>

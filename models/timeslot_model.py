@@ -6,7 +6,8 @@ class TimeSlot(db.Model):
 
     id = Column(Integer(),primary_key=True)
     day = Column(String(255))
-    time = Column(Time())
+    start_time = Column(Time(), nullable=False)
+    end_time = Column(Time(), nullable= False)
     module_id = Column(Integer(), ForeignKey('sessions.id'))
 
     #Relationship

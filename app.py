@@ -5,6 +5,7 @@ from routes.core_route import core_route
 from routes.api_route import api   
 import flask_security
 import models
+import flask_migrate
 
 
 #Route imports here
@@ -16,8 +17,8 @@ from routes.lecturer_route import lecturer_route
 def create_app():
     app = Flask(__name__)
     cors = CORS(app)
-    app.config.from_object('config') 
-
+    app.config.from_object('config')
+    
     return app
 
 
@@ -26,6 +27,8 @@ app = create_app()
 
 #Linking models to app
 models.db.init_app(app)
+flask_migrate.Migrate(app=app, db=models.db)
+
 
 
 #Authentication config

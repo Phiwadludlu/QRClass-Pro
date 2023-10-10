@@ -11,3 +11,5 @@ flask-security-too
 python-dotenv
 flask-sqlalchemy
 flask-cors==4.0.0
+flask-migrate
+marshmallow

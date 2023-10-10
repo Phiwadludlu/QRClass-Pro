@@ -9,9 +9,7 @@ class ModuleSession (db.Model):
     __tablename__ = "sessions"
 
     id = Column(Integer(), primary_key=True)
-    date = Column(Date(), unique=True )
-    start_time = Column(Time(), nullable=False)
-    end_time = Column(Time(), nullable= False)
+    date = Column(Date(), nullable=False)
     created_at = Column(DateTime(), nullable=False, default=datetime.now())
     modified_at = Column(DateTime(), default= datetime.now())
     module_id = Column(Integer(), ForeignKey("modules.id"))

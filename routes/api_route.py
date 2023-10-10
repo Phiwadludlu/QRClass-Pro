@@ -2,14 +2,13 @@ from flask import Blueprint
 from controllers import lecturer_controller as lc
 from controllers import multiselect_controller as mc
 from controllers import searchfield_controller as sfc
-from controllers import test_db as ddb
-from controllers.core_controller import lecturer_sign_up, student_sign_up
+from controllers import api_controller as apic
 
 api = Blueprint("api_routes",__name__)
 
-api.get("/qualification/all")(ddb.getAllQualifications)
-api.get("/module/all")(ddb.getAllModules)
-api.get("/attendance/all")(ddb.getAllAttendance)
+api.get("/qualification/all")(apic.send_all_qualifications)
+api.get("/module/all")(apic.send_all_modules)
+api.get("/attendance/all")(apic.send_all_attendance)
 
 api.post("/config/multiselect") (mc.handleTableByModule)
 api.post("/config/searchfield") (sfc.handleTableByStudentNumber)

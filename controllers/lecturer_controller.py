@@ -1,14 +1,17 @@
 from flask import render_template
 from flask_security.decorators import permissions_required,roles_required
-from controllers import test_db as ddb
+from controllers import api_controller as apic
+import json
 
 @roles_required('lecturer')
 def viewByAllAttendance():
-    return render_template('layouts/lecturer/LecturerAttendance_All_layout.html', attendance_data=ddb.getAllAttendance())
+    attendance_data = json.loads(apic.send_all_attendance().data)
+    return render_template('layouts/lecturer/LecturerAttendance_All_layout.html', attendance_data=attendance_data)
 
 @roles_required('lecturer')
 def viewByModuleAttendance():
-    return render_template('layouts/lecturer/LecturerAttendance_Module_layout.html', modules=ddb.getAllModules(), module_limit=1, module_tags=[])
+    module_data = json.loads(apic.send_all_modules().data)
+    return render_template('layouts/lecturer/LecturerAttendance_Module_layout.html', modules=module_data)
 
 @roles_required('lecturer')
 def viewByStudentAttendance():
@@ -16,7 +19,8 @@ def viewByStudentAttendance():
 
 @roles_required('lecturer')
 def activeQR():
-    return render_template('layouts/lecturer/ActiveQR_layout.html', qr_data=ddb.getAllQR())
+    qr_data = json.loads(apic.send_all_qr_data().data)
+    return render_template('layouts/lecturer/ActiveQR_layout.html', qr_data=qr_data)
 
 @roles_required('lecturer')
 def generateQR():
@@ -32,4 +36,5 @@ def lecturerMain():
 
 @roles_required('lecturer')
 def manage():
-    return render_template('layouts/Manage_layout.html', modules=ddb.getAllModules())
+    module_data = json.loads(apic.send_all_modules().data)
+    return render_template('layouts/Manage_layout.html', modules=module_data)

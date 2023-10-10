@@ -4,6 +4,7 @@ from flask import redirect, render_template,request, url_for,flash, session
 from models.auth_models.roles_model import Role
 from models import Lecturer,Student
 import services
+from utils import dummy_data
 
 from flask_security import auth_required
 from flask_security.registerable import register_user
@@ -30,6 +31,11 @@ def create_tables():
     
     return "Done", 200
 
+
+def add_dummy_data():
+    dummy_data.run()
+
+    return "Sharp🤙", 200
 
 def login():
 

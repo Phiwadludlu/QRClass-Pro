@@ -1,5 +1,5 @@
 from flask import request, get_template_attribute
-from controllers import test_db as ddb
+from controllers import api_controller as apic
 import json
 
 def handleTableByModule():
@@ -13,8 +13,9 @@ def handleTableByModule():
     print(unloaded)
 
     if returnType=="module-table":
+        attendance_data = json.loads(apic.send_all_attendance().data)
         table = get_template_attribute("macros/__table__.html","self")
-        filtered_modules = [item for item in ddb.getAllAttendance() if item["code"] == selection[0]]
+        filtered_modules = [item for item in attendance_data if item["module_code"] == selection[0]]
         return table(filtered_modules)
     else:
         return {}

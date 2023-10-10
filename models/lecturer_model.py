@@ -11,7 +11,7 @@ class Lecturer(db.Model):
 
     id = db.Column(db.Integer(),primary_key = True)
     staff_number = db.Column(db.String(255), unique=True)
-    modified = db.Column(db.DateTime(), default=datetime.now)
+    modified_at = db.Column(db.DateTime(), default=datetime.now)
     created_at = db.Column(db.DateTime(), default = datetime.now)
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
     
