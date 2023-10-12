@@ -5,7 +5,7 @@
         <tr>
             <th scope="col">Module Code</th>
             <th scope="col">Module Name</th>
-            <th scope="col">Sessions</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody class="table-group-divider">
@@ -13,7 +13,18 @@
         <tr>
             <th scope="row">{{ item.code }}</th>
             <td>{{ item.name }}</td>
-            <td>{{ item.sessions }}</td>
+            <td>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="" class="link-dark gap-2 link-underline link-underline-opacity-0">
+                        <span class="material-symbols-outlined"> edit </span>
+                        Edit
+                    </a>
+                    <a href="" class="link-dark gap-2 link-underline link-underline-opacity-0">
+                        <span class="material-symbols-outlined"> delete </span>
+                        Delete
+                    </a>
+                </div>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

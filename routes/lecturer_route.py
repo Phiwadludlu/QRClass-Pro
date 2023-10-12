@@ -11,6 +11,7 @@ lecturer_route.get('/attendance/module') (le_controller.viewByModuleAttendance)
 lecturer_route.get('/attendance/student') (le_controller.viewByStudentAttendance)
 
 lecturer_route.get('/manage') (le_controller.manage)
+lecturer_route.get('/manage/edit/<int:module_id>') (le_controller.edit_module)
 
 lecturer_route.get('/qr/active') (le_controller.activeQR)
 lecturer_route.get('/qr/generate') (le_controller.generateQR)

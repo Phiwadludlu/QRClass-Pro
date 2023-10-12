@@ -1,13 +1,13 @@
 from flask import jsonify
 from models import db, Attendance, Student, ModuleSession, Module, Qualification, QR, TimeSlot, StudentRegister
 from services import api_services as api_s
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy import and_
 
 def get_attendance_query():
     attendance_query = db.session.query(Attendance, ModuleSession, Student,Module)\
         .join(ModuleSession, ModuleSession.id == Attendance.session_id)\
-        .join(Student, Student.id == Attendance.student_id).join(Module, ModuleSession.module_id == Module.id )
+        .join(Student, Student.id == Attendance.student_id).join(Module, ModuleSession.module_id == Module.id ).filter( Attendance.created_at >= datetime.now() - timedelta(days=14))
     
     return attendance_query
 

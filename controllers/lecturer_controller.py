@@ -37,4 +37,9 @@ def lecturerMain():
 @roles_required('lecturer')
 def manage():
     module_data = json.loads(apic.send_all_modules().data)
-    return render_template('layouts/Manage_layout.html', modules=module_data)
+    return render_template('layouts/lecturer/Manage_layout.html', modules=module_data)
+
+@roles_required('lecturer')
+def edit_module(module_id):
+    
+    return render_template('layouts/lecturer/EditModules_layout.html')

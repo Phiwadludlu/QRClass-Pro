@@ -309,4 +309,39 @@ app.component('sessionpicker', {
     },
 });
 
+app.component('timetracker', {
+    template: '#timetracker-template',
+    data() {
+        return {
+            days: ['Select day', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            rows: [{ day: 'Select day', times: '' }],
+        };
+    },
+    methods: {
+        addRow() {
+            this.rows.push({ day: 'Select day', times: '' });
+        },
+        removeRow(index) {
+            if (index > 0) {
+                this.rows.splice(index, 1);
+            }
+        },
+        updateTimes(day, times, index) {
+            if (day !== 'Select day') {
+                this.rows[index] = { day, times };
+            }
+        },
+    },
+    computed: {
+        timeSlots() {
+            const timeSlots = {};
+            for (const { day, times } of this.rows) {
+                if (day !== 'Select day') {
+                    timeSlots[day] = times.split(',').map(slot => slot.trim());
+                }
+            }
+            return timeSlots;
+        },
+    },
+});
 const vm = app.mount('#app');

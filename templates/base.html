@@ -80,6 +80,48 @@
             </ul>
         </div>
     </template>
+    <template id="timetracker-template">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Day of the week</th>
+                        <th scope="col">Time(s)</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider" style="border : 0px">
+                    <tr v-for="(row, index) in rows" :key="index">
+                        <th scope="row">{{'{{ index + 1 }}'}}</th>
+                        <td>
+                            <select class="form-select" v-model="row.day">
+                                <option v-for="day in days" :value="day">{{'{{ day }}'}}</option>
+                            </select>
+                        </td>
+                        <td colspan="2">
+                            <input type="text" class="form-control" v-model="row.times" style="min-width: 155px;"
+                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                data-bs-title="E.g '14:30-16:00' Or '09:00-10:00, 12:00-13:00, 16:00-17:00'" />
+                        </td>
+                        <td>
+                            <span class="d-flex justify-content-center mt-2 material-symbols-outlined"
+                                @click="removeRow(index)" style="cursor: pointer;" v-if="index > 0">
+                                remove
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="col-md-2 mt-3">
+                <button role="button" @click="addRow"
+                    class="btn d-flex align-items-center justify-content-center bg-light-subtle border border-1">
+                    <span class="material-symbols-outlined">add</span>
+                    Add row
+                </button>
+            </div>
+        </div>
+    </template>
     {% block script %}{% endblock %}
 </body>
 
