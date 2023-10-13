@@ -21,7 +21,7 @@ def format_module_query(data):
     result = []
     for item in data:
         schema = {
-            "id" : item.module_code,
+            "id" : item.id,
             "code" : item.module_code,
             "name" : item.module_name,
             "type" : "module",
@@ -35,7 +35,7 @@ def format_qualification_query(data):
     result = []
     for item in data:
         schema = {
-            "id" : item.code,
+            "id" : item.id,
             "code" : item.code,
             "name" : item.name,
             "type" : "qualification",

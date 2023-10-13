@@ -14,6 +14,8 @@ from routes.api_route import api
 from routes.student_route import student_route
 from routes.lecturer_route import lecturer_route
 
+from controllers import core_controller as cl
+
 def create_app():
     app = Flask(__name__)
     cors = CORS(app)
@@ -24,6 +26,10 @@ def create_app():
 
 #Flask App instane
 app = create_app()
+
+@app.errorhandler(404)
+def handle_not_found(e):
+    return cl.not_found(e)
 
 #Linking models to app
 models.db.init_app(app)

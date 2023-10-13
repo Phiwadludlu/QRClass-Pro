@@ -20,6 +20,9 @@ from forms.auth_forms.sign_up_form import StudentSignUp,LecturerSignUp, StudentR
 
 
 
+def not_found(error):
+   return render_template("layouts/404.html"), 404
+
 @anonymous_user_required
 def index():
     return render_template('layouts/LandingPage_layout.html')

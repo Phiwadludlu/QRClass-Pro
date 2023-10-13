@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, redirect, url_for
 from flask_security.decorators import permissions_required,roles_required
 from controllers import api_controller as apic
 import json
@@ -43,3 +43,30 @@ def manage():
 def edit_module(module_id):
     
     return render_template('layouts/lecturer/EditModules_layout.html')
+
+@roles_required('lecturer')
+def add_module():
+    
+    return render_template('layouts/lecturer/NewModule_layout.html')
+
+@roles_required('lecturer')
+def remove_module(module_id):
+    '''
+        It wont actually delete the module, will just un assign the lecturer teaching the module
+    '''
+    pass
+
+@roles_required('lecturer')
+def redirect_to_attendence():
+    
+    return redirect(url_for('lecturers.viewByAllAttendance'))
+
+@roles_required('lecturer')
+def redirect_to_manage():
+    
+    return redirect(url_for('lecturers.manage'))
+
+@roles_required('lecturer')
+def redirect_to_qr():
+    
+    return redirect(url_for('lecturers.activeQR'))

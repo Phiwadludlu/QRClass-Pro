@@ -3,6 +3,7 @@ const app = Vue.createApp({
         return {
             moduleItems: [], // Initialize with the expected data structure
             qualificationItems: [],
+            initialData: [{ day: 'Thursday', times: ['08:00-09:00', '11:00-12:00', '14:00-16:00'] }, { day: 'Wednesday', times: ['14:00-16:00'] }, { day: 'Monday', times: ['08:00-09:00', '11:00-12:00'] }],
         };
     },
     methods: {
@@ -311,15 +312,41 @@ app.component('sessionpicker', {
 
 app.component('timetracker', {
     template: '#timetracker-template',
+    setup() {
+        const tt = Vue.ref(null);
+        return {
+            tt
+        }
+    },
+    props: {
+        initialData: {
+            type: Array,
+            default: () => [],
+        },
+    },
     data() {
         return {
             days: ['Select day', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            rows: [{ day: 'Select day', times: '' }],
+            rows: [],
         };
+    },
+    mounted() {
+        if (this.initialData.length > 0) {
+            this.rows = this.initialData.map(item => {
+                const day = item.day || 'Select day';
+                const times = item.times ? item.times.join(', ') : '';
+                return { day, times };
+            });
+        } else {
+            // Default to a single row with "Select day" and blank times
+            this.rows.push({ day: 'Select day', times: '' });
+        }
     },
     methods: {
         addRow() {
-            this.rows.push({ day: 'Select day', times: '' });
+            if (this.rows.length < 5) {
+                this.rows.push({ day: 'Select day', times: '' });
+            }
         },
         removeRow(index) {
             if (index > 0) {
@@ -331,16 +358,38 @@ app.component('timetracker', {
                 this.rows[index] = { day, times };
             }
         },
-    },
-    computed: {
-        timeSlots() {
-            const timeSlots = {};
+        getTimesValidationTitle(index) {
+            return this.areTimesValid(index)
+                ? 'Looks good! 🤙'
+                : 'Its not looking good bruv! 😬 Use: 09:00-10:00, 12:00-13:00, ...';
+        },
+        areTimesValid(index) {
+            const timeFormatRegex = /^(?:[01]\d|2[0-3]):[0-5]\d-(?:[01]\d|2[0-3]):[0-5]\d(?:, ?(?:[01]\d|2[0-3]):[0-5]\d-(?:[01]\d|2[0-3]):[0-5]\d)*$/;
+            return timeFormatRegex.test(this.rows[index].times);
+        },
+        isDayValid(index) {
+            return this.rows[index].day !== 'Select day';
+        },
+        formatTimeslots() {
+            let result = [];
+            let timeslot;
             for (const { day, times } of this.rows) {
+                timeslot = {};
                 if (day !== 'Select day') {
-                    timeSlots[day] = times.split(',').map(slot => slot.trim());
+                    timeslot['day'] = day;
+                    timeslot['times'] = times.split(',').map(slot => slot.trim());
+                    result.push(timeslot);
                 }
             }
-            return timeSlots;
+            return result;
+        },
+        isAllFieldsValid() {
+            return this.rows.every(row => {
+                const dayIsValid = row.day !== 'Select day';
+                const timeFormatRegex = /^(?:[01]\d|2[0-3]):[0-5]\d-(?:[01]\d|2[0-3]):[0-5]\d(?:, ?(?:[01]\d|2[0-3]):[0-5]\d-(?:[01]\d|2[0-3]):[0-5]\d)*$/;
+                const timesAreValid = timeFormatRegex.test(row.times);
+                return dayIsValid && timesAreValid;
+            });
         },
     },
 });
