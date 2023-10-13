@@ -1,6 +1,5 @@
 
-from models.session_model import ModuleSession
-
+from models import ModuleSession, Module, TimeSlot, Attendance, Student, QR
 
 class QRService:
 
