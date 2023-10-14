@@ -13,7 +13,7 @@ class Student(db.Model):
     modified_at = db.Column(db.DateTime, default=datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     qualification_id = db.Column(db.Integer(), db.ForeignKey('qualifications.id'))
-    student_register_id = db.Column(db.Integer(), db.ForeignKey('studentRegister.id'))
+
 
     #Relationship with User model
     user = db.relationship("User", back_populates="student")
@@ -22,7 +22,7 @@ class Student(db.Model):
     qualification = relationship('Qualification', secondary='qualification_period', backref=backref('students', lazy="dynamic"))
 
     #Relationship with student reg
-    student_register = relationship('StudentRegister', back_populates='student')
+    modules = relationship('Module', secondary='studentRegister', backref=backref('students', lazy=True))
 
     #Relationship with session
     session = relationship("ModuleSession", secondary= "attendance", backref=backref('students', lazy=True))

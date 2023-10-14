@@ -7,11 +7,8 @@ class StudentRegister(db.Model):
     __tablename__ ='studentRegister'
 
     id = Column(Integer(), primary_key=True)
-    module_id = Column(Integer(), ForeignKey('modules.id'))
+    module_id = Column(Integer(), db.ForeignKey('modules.id'))
+    student_id = Column(Integer(), db.ForeignKey('students.id'))
     year = Column(Integer(), nullable=False)
     semester = Column(Integer(), nullable=False)
 
-    #Relationships
-    #Relationship with student
-
-    student = relationship("Student", back_populates="student_register")
