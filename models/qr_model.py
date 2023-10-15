@@ -1,7 +1,7 @@
 from models import db
 from datetime import datetime
 
-from sqlalchemy import Column,Integer,String,Date,Time,DateTime,ForeignKey, Boolean
+from sqlalchemy import Column,Integer,String,DateTime,Boolean
 
 class QR(db.Model):
     __tablename__ = 'qr'
@@ -9,6 +9,7 @@ class QR(db.Model):
     expiration_date = Column(DateTime, nullable=False)
     is_active = Column(Boolean(), default=True)
     qr_url = Column(String(255))
+    url_uuid = Column(String(255))
     created_at = Column(DateTime, default=datetime.now())
     modified_at = Column(DateTime, default=datetime.now())
 

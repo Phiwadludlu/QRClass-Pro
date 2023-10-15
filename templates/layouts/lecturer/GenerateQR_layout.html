@@ -16,6 +16,7 @@
 
 {% block content %}
 <div class="container-lg">
+    <div id="alert-section"></div>
     <div class="d-flex flex-row">
         <a href="/lecturer/" role="button" class="btn bg-transparent rounded border border-0">
             <span class="material-symbols-outlined">
@@ -34,23 +35,23 @@
     <div class="container-fluid mt-2">
         <div class="row">
             <p class="fs-5 fw-lighter">Module</p>
-            <multiselect :search-field-id="'multiselect-searchfield'" :dropdown-id="'dropdown-items'"
+            <multiselect ref="ms" :search-field-id="'multiselect-searchfield'" :dropdown-id="'dropdown-items'"
                 :items="moduleItems" :checkbox-type="'checkbox'" :limit="1" :return-type="'module-selection'"
-                :action="'module-filter'"></multiselect>
+                :action="'module-filter'" @selected-module="updateSelectedModule"></multiselect>
         </div>
         <div class="row">
             <p class="fs-5 fw-lighter mb-0">Session</p>
-            <sessionpicker></sessionpicker>
+            <sessionpicker ref="sp" :module="selectedModule"></sessionpicker>
         </div>
         <div class="row mb-3">
             <p class="fs-5 fw-lighter">Expires</p>
-            <numberpicker></numberpicker>
+            <numberpicker ref="np"></numberpicker>
         </div>
         <div class="row">
             <div class="d-flex justify-content-center">
-                <a href="share" type="button" class="btn btn-secondary w-75">
+                <button id="generateQRbtn" type="button" class="btn btn-secondary w-75">
                     Generate
-                </a>
+                </button>
             </div>
         </div>
     </div>
@@ -68,7 +69,7 @@
                         -
                     </button>
                     <input id="expiration-value" type="number" :value="value" class="form-control text-center"
-                        :max="maxValue" min="1" style="width: 48px; height: 48px;" @input="updateValue"/>
+                        :max="maxValue" min="1" style="width: 48px; height: 48px;" @input="updateValue" />
                     <button role="button" class="btn border rounded-circle" style="width: 48px; height: 48px;"
                         @click="increment">
                         +
@@ -90,8 +91,9 @@
     <div class="d-flex flex-column gap-3">
         <div class="row">
             <div class="col-md-6">
-                <label for="dayDropdown" class="form-label fw-lighter">Select a day:</label>
+                <label for="dayDropdown" class="form-label fw-lighter">Day</label>
                 <select class="form-select" id="dayDropdown" v-model="selectedDay">
+                    <option value="Select a day">Select a day</option>
                     <option value="Monday">Monday</option>
                     <option value="Tuesday">Tuesday</option>
                     <option value="Wednesday">Wednesday</option>
@@ -100,9 +102,11 @@
                 </select>
             </div>
             <div class="col-md-6">
-                <label for="timeDropdown" class="form-label fw-lighter">Select a time slot:</label>
-                <select class="form-select" id="timeDropdown" v-model="selectedTime">
-                    <option v-for="hour in hours" :key="hour" :value="hour">{{'{{ hour }}'}}</option>
+                <label for="timeDropdown" class="form-label fw-lighter">Timeslot</label>
+                <select class="form-select" id="timeDropdown" v-model="selectedTime"
+                    :disabled="timeOptions.length === 0">
+                    <option v-for="option in timeOptions" :key="option.value" :value="option.value">{{'{{ option.label
+                        }}'}}</option>
                 </select>
             </div>
         </div>
@@ -110,4 +114,83 @@
 </template>
 
 <script src="/static/custom.js" type="text/javascript"></script>
+<script>
+    const multiselectComponent = app._instance.refs.ms;
+    const timeslotComponent = app._instance.refs.sp;
+    const durationComponent = app._instance.refs.np;
+    window.$dev = { multiselectComponent, timeslotComponent, durationComponent };
+    const alertSection = document.getElementById("alert-section");
+
+    const appendAlert = (message, type) => {
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+            `   <div>${message}</div>`,
+            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+            '</div>'
+        ].join('')
+        alertSection.append(wrapper);
+    }
+
+    function calcExpirationDate(value, selectedDuration, utcOffset) {
+        const expirationDate = new Date();
+
+        if (!value) return;
+        if (!selectedDuration) return;
+
+        switch (selectedDuration) {
+            case "min":
+                expirationDate.setMinutes(expirationDate.getMinutes() + value);
+                break;
+            case "hr":
+                expirationDate.setHours(expirationDate.getHours() + value);
+                break;
+            case "day":
+                expirationDate.setDate(expirationDate.getDate() + value);
+                break;
+        }
+
+        // return with offset of +2 utc
+        expirationDate.setHours(expirationDate.getHours() + utcOffset);
+
+        const str_expirationDate = expirationDate.toISOString();
+        return str_expirationDate.slice(0, str_expirationDate.length - 1);
+    }
+
+    const generateQRbtn = document.getElementById("generateQRbtn");
+
+    generateQRbtn.addEventListener('click', async () => {
+        const module_code = multiselectComponent.currentTags[0];
+        const timeslot_id = timeslotComponent.selectedTime;
+        const expiration_date = calcExpirationDate(durationComponent.value, durationComponent.selectedDuration, 2);
+
+        if (module_code && timeslot_id && expiration_date) {
+            const formattedData = {
+                module_code,
+                timeslot_id,
+                expiration_date
+            };
+            console.log(formattedData)
+
+            const res = await fetch('/api/v1/qr/generate', {
+                mode: 'cors',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formattedData)
+            }).then(result => result.json());
+
+            if (res.success === 1) {
+                window.location.assign(`./share?img=${btoa(res.img)}`)
+            } else if (res.success === 0) {
+                appendAlert('Something went wrong. Try again later.', 'danger');
+            }
+
+        } else {
+            appendAlert('Please fill in all the fields.', 'warning');
+        }
+    });
+
+</script>
 {% endblock %}

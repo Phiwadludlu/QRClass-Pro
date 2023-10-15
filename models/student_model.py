@@ -19,10 +19,10 @@ class Student(db.Model):
     user = db.relationship("User", back_populates="student")
 
     #Relationship with qualificaiton model
-    qualification = relationship('Qualification', secondary='qualification_period', backref=backref('students', lazy="dynamic"))
+    qualifications = relationship('Qualification', secondary='qualification_period', backref=backref('students', lazy="dynamic"))
 
     #Relationship with student reg
     modules = relationship('Module', secondary='studentRegister', backref=backref('students', lazy=True))
 
     #Relationship with session
-    session = relationship("ModuleSession", secondary= "attendance", backref=backref('students', lazy=True))
+    sessions = relationship("ModuleSession", secondary= "attendance", backref=backref('students', lazy=True))

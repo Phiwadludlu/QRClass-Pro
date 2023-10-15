@@ -32,7 +32,7 @@
         <div class="d-flex flex-column justify-content-center overflow-x-hidden">
             <video id="video" style="width:250px;height:250px; object-fit: cover;"></video>
         </div>
-        <div class="d-flex justify-content-center"><button id="picture" type="button"
+        <div class="d-flex justify-content-center"><button type="button" onclick="()=>scanQRCode({{ student_number }})"
                 class="btn justify-content-center d-flex align-items-center btn-outline-secondary">Scan
                 <span class="material-symbols-outlined"> photo_camera </span></button>
         </div>
@@ -49,7 +49,6 @@
     document.addEventListener("DOMContentLoaded", function () {
         const videoElement = document.getElementById("video");
         const qrResult = document.getElementById("qr-result");
-        const buttonScan = document.getElementById("picture");
 
         // Function to start the camera stream
         function startCamera() {
@@ -65,8 +64,39 @@
                 });
         }
 
+        function destructure_QR_text(inputString) {
+            var keyValuePairs = inputString.split('&');
+            var result = {};
+
+            for (var i = 0; i < keyValuePairs.length; i++) {
+                var pair = keyValuePairs[i].split('=');
+                var key = pair[0];
+                var value = pair[1];
+
+                // You can convert the value to a number if it's numeric
+                if (!isNaN(value)) {
+                    value = parseInt(value, 10);
+                }
+
+                result[key] = value;
+            }
+
+            return result;
+        }
+
+        const appendAlert = (message, type) => {
+            const wrapper = document.createElement('div')
+            wrapper.innerHTML = [
+                `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                `   <div>${message}</div>`,
+                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                '</div>'
+            ].join('')
+            qrResult.append(wrapper);
+        }
+
         // Function to continuously scan for QR codes
-        function scanQRCode() {
+        function scanQRCode(student_number) {
             const canvas = document.createElement("canvas");
             const context = canvas.getContext("2d");
             const videoWidth = videoElement.videoWidth;
@@ -74,44 +104,47 @@
             canvas.width = videoWidth;
             canvas.height = videoHeight;
 
-            const alertPlaceholder = document.querySelector('div#qr-result');
             let timeoutId;
-            
-            const scanFrame = () => {
+
+            const scanFrame = async (stud_num) => {
                 context.drawImage(videoElement, 0, 0, videoWidth, videoHeight);
                 const imageData = context.getImageData(0, 0, videoWidth, videoHeight);
                 const code = jsQR(imageData.data, imageData.width, imageData.height);
 
-                alertPlaceholder.innerHTML = '';
+                qrResult.innerHTML = '';
 
                 if (code) {
-                    qrResult.innerText = code.data;
-                } else {
-                    const appendAlert = (message, type) => {
-                        const wrapper = document.createElement('div')
-                        wrapper.innerHTML = [
-                            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-                            `   <div>${message}</div>`,
-                            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-                            '</div>'
-                        ].join('')
-                        alertPlaceholder.append(wrapper);
-                    }
+                    const response = await fetch('/api/v1/qr/verify', {
+                        mode: 'cors',
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            student_number : stud_num,
+                            ...destructure_QR_text(code.data)
+                        })
+                    }); 
 
-                    appendAlert('Invalid QR code.', 'warning');
+                    const result = response.json();
+                    console.log(result);
+
+                    if (result.success === 1) {
+                        appendAlert('Successfully logged attendance!', 'success');
+                    } else {
+                        appendAlert('Invalid uuid.', 'danger');
+                    }
+                } else {
+                    appendAlert(`Invalid QR code. ${code}`, 'warning');
                 }
             };
 
-            requestAnimationFrame(scanFrame);
+            requestAnimationFrame(scanFrame(student_number));
         }
 
 
         // Start the camera when the page loads
         startCamera();
-
-        buttonScan.addEventListener("click", () => {
-            scanQRCode();
-        })
 
     });
 </script>

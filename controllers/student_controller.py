@@ -20,4 +20,4 @@ def StudentMain():
 
 @roles_required('student')
 def scanQR():
-    return render_template("layouts/student/ScanQR_layout.html")
+    return render_template("layouts/student/ScanQR_layout.html", student_number=current_user.student.student_number)

@@ -8,6 +8,7 @@
 
 {% block content %}
 <div class="container-lg h-100">
+    <div id="alert-section"></div>
     <div class="d-flex flex-row">
         <button role="button" class="btn bg-transparent rounded border border-0" data-bs-toggle="modal"
             data-bs-target="#staticConfirmBack">
@@ -63,22 +64,6 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="staticSavedSuccess" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Success</h1>
-            </div>
-            <div class="modal-body">
-                Updated successfully! 🤙
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="modal-yayi">Yayi!</button>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block script %}
@@ -87,14 +72,26 @@
     const saveEdit = document.getElementById("add-module");
     const moduleName = document.getElementById("moduleName_field");
     const moduleCode = document.getElementById("moduleCode_field");
-    const modalYayi = document.getElementById("modal-yayi");
     const timetrackerComponent = app._instance.refs.tt;
+    const qrResult = document.getElementById("alert-section");
+
+    const appendAlert = (message, type) => {
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+            `   <div>${message}</div>`,
+            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+            '</div>'
+        ].join('')
+        qrResult.append(wrapper);
+    }
 
     moduleName.addEventListener('change', () => moduleName.classList.remove("border", "border-1", "border-danger"));
     moduleCode.addEventListener('change', () => moduleCode.classList.remove("border", "border-1", "border-danger"));
 
-    saveEdit.addEventListener('click', () => {
-        console.log(moduleName.value);
+    let modalClickOnce = 0;
+
+    saveEdit.addEventListener('click', async () => {
         if (!moduleCode.value) {
             moduleCode.focus();
             moduleCode.classList.add("border", "border-1", "border-danger");
@@ -110,18 +107,21 @@
 
         const formattedSlots = timetrackerComponent.formatTimeslots();
         const data = { module_code: moduleCode.value, module_name: moduleName.value, timeslots: formattedSlots };
-        console.log(JSON.stringify(data));
 
-        console.log("Saved!");
-        saveEdit.setAttribute("data-bs-toggle", "modal");
-        saveEdit.setAttribute("data-bs-target", "#staticSavedSuccess");
-        saveEdit.click();
-    });
+        const res = await fetch('/api/v1/module/add', {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        }).then(result => result.json());
 
-    modalYayi.addEventListener('click', () => {
-        saveEdit.removeAttribute("data-bs-toggle");
-        saveEdit.removeAttribute("data-bs-target");
-        return window.location.assign('/lecturer/manage');
+        if (res.success === 1) {
+            return window.location.assign('/lecturer/manage');
+        } else {
+            appendAlert('Something went wrong. Try again later.', 'warning');
+        }
     });
 </script>
 {% endblock %}

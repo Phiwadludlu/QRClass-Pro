@@ -1,12 +1,18 @@
 const app = Vue.createApp({
     data() {
         return {
+            timeslotsData: [],
             moduleItems: [], // Initialize with the expected data structure
             qualificationItems: [],
+            selectedModule: '',
             initialData: [{ day: 'Thursday', times: ['08:00-09:00', '11:00-12:00', '14:00-16:00'] }, { day: 'Wednesday', times: ['14:00-16:00'] }, { day: 'Monday', times: ['08:00-09:00', '11:00-12:00'] }],
         };
     },
     methods: {
+        updateSelectedModule(newVal) {
+            this.selectedModule = newVal;
+            console.log(newVal);
+        },
         async fetchModuleItems() {
             try {
                 // Replace with your actual API endpoint for moduleItems
@@ -48,6 +54,12 @@ const app = Vue.createApp({
 
 app.component('multiselect', {
     template: '#multiselect-template',
+    setup() {
+        const ms = Vue.ref(null);
+        return {
+            ms
+        }
+    },
     props: {
         searchFieldId: String,
         dropdownId: String,
@@ -159,6 +171,7 @@ app.component('multiselect', {
                     }
                 }
             }
+            this.$emit('selected-module', this.currentTags[0]);
         },
         handleTagClick(tag) {
             // Remove the clicked tag from currentTags
@@ -182,7 +195,7 @@ app.component('multiselect', {
     },
     mounted() {
         this.debounceInput('multiselect-searchfield');
-    }
+    },
 });
 
 app.component('searchfield', {
@@ -227,6 +240,12 @@ app.component('searchfield', {
 
 app.component('numberpicker', {
     template: '#numberpicker-template',
+    setup() {
+        const np = Vue.ref(null);
+        return {
+            np
+        }
+    },
     props: {
         initialValue: {
             type: Number,
@@ -289,24 +308,63 @@ app.component('numberpicker', {
 
 app.component('sessionpicker', {
     template: '#session-template',
-    data() {
-        const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const currentDayIndex = new Date().getDay(); // 0 is Sunday, 1 is Monday, and so on.
-        let defaultDay = daysOfWeek[currentDayIndex];
-
-        // Check if it's a weekend (Sunday or Saturday) and default to Monday
-        if (currentDayIndex === 0 || currentDayIndex === 6) {
-            defaultDay = "Monday";
-        }
-
+    setup() {
+        const sp = Vue.ref(null);
         return {
-            selectedDay: defaultDay,
-            selectedTime: "8:00 AM",
-            hours: [
-                "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
-                "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM"
-            ]
+            sp
+        }
+    },
+    props: {
+        module: String
+    },
+    data() {
+        return {
+            selectedDay: "Select a day",
+            selectedTime: "",
+            timeslots: []
         };
+    },
+    methods: {
+        async fetchTimeslots() {
+            try {
+                // Replace with your actual API endpoint for moduleItems
+                const response = await fetch('http://127.0.0.1:5000/api/v1/timeslots/module', {
+                    mode: 'cors',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        module_code: this.module
+                    })
+                });
+                const timeslotsData = await response.json();
+                this.timeslots = timeslotsData;
+                console.log(timeslotsData)
+            } catch (error) {
+                console.error('Error fetching timeslotsData:', error);
+            }
+        },
+    },
+    watch: {
+        module (newValue, oldValue) {
+            this.fetchTimeslots();
+        },
+    },
+    computed: {
+        timeOptions() {
+            if (this.selectedDay) {
+                const selectedDayTimeslots = this.timeslots.find(dayData => dayData.day === this.selectedDay);
+
+                if (selectedDayTimeslots) {
+                    return selectedDayTimeslots.timeslots.map(slot => ({
+                        value: slot.timeslot_id,
+                        label: `${slot.period.start_time}-${slot.period.end_time}`,
+                    }));
+                }
+            }
+            return [];
+        },
     },
 });
 
@@ -393,4 +451,5 @@ app.component('timetracker', {
         },
     },
 });
+
 const vm = app.mount('#app');

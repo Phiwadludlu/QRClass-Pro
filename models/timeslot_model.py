@@ -1,4 +1,4 @@
-from sqlalchemy import Column,Integer,String,Date,Time,DateTime,ForeignKey, Time
+from sqlalchemy import Column,Integer,String,Time,ForeignKey, Time
 from models import db
 
 class TimeSlot(db.Model):
@@ -8,8 +8,8 @@ class TimeSlot(db.Model):
     day = Column(String(255))
     start_time = Column(Time(), nullable=False)
     end_time = Column(Time(), nullable= False)
-    module_id = Column(Integer(), ForeignKey('sessions.id'))
+    module_id = Column(Integer(), ForeignKey('modules.id'))
 
     #Relationship
 
-    module_session = db.relationship('ModuleSession', back_populates="timeslot")
+    sessions = db.relationship('ModuleSession', back_populates="timeslot")

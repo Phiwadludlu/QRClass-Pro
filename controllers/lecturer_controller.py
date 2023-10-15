@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, request
 from flask_security.decorators import permissions_required,roles_required
 from controllers import api_controller as apic
 import json
@@ -28,7 +28,11 @@ def generateQR():
 
 @roles_required('lecturer')
 def showGeneratedQR():
-    return render_template('layouts/lecturer/QRGenerated_layout.html')
+    img_data = request.args['img']
+    if img_data:
+        return render_template('layouts/lecturer/QRGenerated_layout.html', img_data=img_data)
+    else:
+        return redirect(url_for('not_found'))
 
 @roles_required('lecturer')
 def lecturerMain():

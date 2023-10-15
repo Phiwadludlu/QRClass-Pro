@@ -13,3 +13,4 @@ flask-sqlalchemy
 flask-cors==4.0.0
 flask-migrate
 marshmallow
+qrcode>=7.4.2
