@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+<div class="toast-container p-3 bottom-0 end-0" id="toast-area"></div>
 <div class="container-lg h-100">
     <div id="alert-section"></div>
     <div class="d-flex flex-row">
@@ -76,14 +77,19 @@
     const qrResult = document.getElementById("alert-section");
 
     const appendAlert = (message, type) => {
-        const wrapper = document.createElement('div')
+        const wrapper = document.querySelector("div#toast-area");
         wrapper.innerHTML = [
-            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-            `   <div>${message}</div>`,
-            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-            '</div>'
-        ].join('')
-        qrResult.append(wrapper);
+            `<div class="toast align-items-center bg-${type} text-white position-relative border-0"
+                role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+            </div>`
+        ].join('');
     }
 
     moduleName.addEventListener('change', () => moduleName.classList.remove("border", "border-1", "border-danger"));
@@ -117,10 +123,17 @@
             body: JSON.stringify(data)
         }).then(result => result.json());
 
-        if (res.success === 1) {
+        if (res.success === -2) {
+            appendAlert('Something went wrong. Try again later.', 'danger');
+        } else if (res.success === -1) {
+            appendAlert('Module code and/or Module name already in use.', 'danger');
+        } else if (res.success === 1) {
             return window.location.assign('/lecturer/manage');
-        } else {
-            appendAlert('Something went wrong. Try again later.', 'warning');
+        }
+        const toastItem = document.querySelector("div.toast");
+        if (toastItem) {
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastItem);
+            toastBootstrap.show()
         }
     });
 </script>

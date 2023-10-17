@@ -5,13 +5,11 @@ const app = Vue.createApp({
             moduleItems: [], // Initialize with the expected data structure
             qualificationItems: [],
             selectedModule: '',
-            initialData: [{ day: 'Thursday', times: ['08:00-09:00', '11:00-12:00', '14:00-16:00'] }, { day: 'Wednesday', times: ['14:00-16:00'] }, { day: 'Monday', times: ['08:00-09:00', '11:00-12:00'] }],
         };
     },
     methods: {
         updateSelectedModule(newVal) {
             this.selectedModule = newVal;
-            console.log(newVal);
         },
         async fetchModuleItems() {
             try {
@@ -49,6 +47,15 @@ const app = Vue.createApp({
     created() {
         this.fetchModuleItems();
         this.fetchQualificationItems();
+        var queryParams = window.location.search.substring(1).split('&');
+        for (var i = 0; i < queryParams.length; i++) {
+            var param = queryParams[i].split('=');
+            if (param[0] === 'module') {
+                // Set "selectedModule" to the value of the "module" query parameter
+                this.selectedModule = decodeURIComponent(param[1]);
+                break;
+            }
+        }
     }
 });
 
@@ -315,7 +322,10 @@ app.component('sessionpicker', {
         }
     },
     props: {
-        module: String
+        module: {
+            type: String,
+            default: '',
+        }
     },
     data() {
         return {
@@ -347,7 +357,7 @@ app.component('sessionpicker', {
         },
     },
     watch: {
-        module (newValue, oldValue) {
+        module(newValue, oldValue) {
             this.fetchTimeslots();
         },
     },
@@ -377,30 +387,93 @@ app.component('timetracker', {
         }
     },
     props: {
-        initialData: {
-            type: Array,
-            default: () => [],
-        },
+        module: {
+            type: String,
+            default: '',
+        }
     },
     data() {
         return {
             days: ['Select day', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
             rows: [],
+            initialData: [],
         };
     },
     mounted() {
-        if (this.initialData.length > 0) {
-            this.rows = this.initialData.map(item => {
-                const day = item.day || 'Select day';
-                const times = item.times ? item.times.join(', ') : '';
-                return { day, times };
-            });
+        if (this.module !== '') {
+            this.fetchTimeslots();
         } else {
-            // Default to a single row with "Select day" and blank times
             this.rows.push({ day: 'Select day', times: '' });
         }
+
     },
     methods: {
+        async fetchTimeslots() {
+            try {
+                // Replace with your actual API endpoint for moduleItems
+                const response = await fetch('http://127.0.0.1:5000/api/v1/timeslots/module', {
+                    mode: 'cors',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        module_code: this.module
+                    })
+                });
+                const timeslotsData = await response.json();
+
+                function transformData(inputData) {
+                    // Initialize an empty array to store the transformed data
+                    const transformedData = [];
+
+                    // Loop through each day entry in the input data
+                    inputData.forEach(dayEntry => {
+                        // Initialize an empty array to store timeslot strings for the current day
+                        const timeslotStrings = [];
+
+                        function formatTimeSlot(timeSlot) {
+                            const startTime = timeSlot.period.start_time.split(':').slice(0, 2).join(':');
+                            const endTime = timeSlot.period.end_time.split(':').slice(0, 2).join(':');
+                            return `${startTime}-${endTime}`;
+                        }
+                        // Loop through timeslots for the current day
+                        dayEntry.timeslots.forEach(timeslot => {
+                            // Extract start and end times from the timeslot
+                            const { start_time, end_time } = timeslot.period;
+
+                            // Construct the timeslot string (e.g., "11:00-12:00")
+                            const timeslotString = formatTimeSlot(timeslot);
+
+                            // Add the timeslot string to the array
+                            timeslotStrings.push(timeslotString);
+                        });
+
+                        // Join the timeslot strings with commas to create the final times string
+                        const timesString = timeslotStrings.join(', ');
+
+                        // Add the transformed day entry to the result array
+                        transformedData.push({
+                            day: dayEntry.day,
+                            times: timesString,
+                        });
+                    });
+
+                    return transformedData;
+                }
+
+                const formattedTimeslots = transformData(timeslotsData);
+                formattedTimeslots.forEach((item) => {
+                    this.rows.push({
+                        day: item.day,
+                        times: item.times
+                    });
+                });
+
+            } catch (error) {
+                console.error('Error fetching timeslotsData:', error);
+            }
+        },
         addRow() {
             if (this.rows.length < 5) {
                 this.rows.push({ day: 'Select day', times: '' });

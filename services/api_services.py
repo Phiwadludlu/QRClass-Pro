@@ -3,7 +3,8 @@ import datetime
 
 def format_attendance_query(data):
     result = []
-    for attendance, _, student, module in data:
+    for item in data:
+        attendance, _, student, module = item
         schema = {
             "student_number": student.student_number,
             "module_code": module.module_code,
@@ -15,6 +16,15 @@ def format_attendance_query(data):
         result.append(schema)
 
     return jsonify(result)
+
+def format_single_module(data):
+    schema = {
+            "id" : data.id,
+            "code" : data.module_code,
+            "name" : data.module_name,
+            "type" : "module",
+        }
+    return jsonify(schema)
 
 def format_module_query(data):
 
@@ -46,13 +56,13 @@ def format_qualification_query(data):
 
 def format_qr_query(data):
     result = []
-    for module, qr, timeslot, _ in data:
+    for item in data:
+        module, qr, timeslot, _ = item
         schema = {
             "module_name" : module.module_name,
             "session" : timeslot.start_time.isoformat(timespec='minutes') + ' - ' + timeslot.end_time.isoformat(timespec='minutes'),
             "expiration_date" : qr.expiration_date.date().isoformat(),
             "expiration_time" : qr.expiration_date.time().isoformat(timespec='minutes'),
-            "is_active" : qr.is_active,
             "qr_url" : qr.qr_url,
         }
         result.append(schema)
@@ -61,12 +71,13 @@ def format_qr_query(data):
 
 def format_timetable_query(data):
     result = []
-    for _, _, module, timeslot, attendance in data:
+    for item in data:
+        _, _, module, timeslot, _, session = item
         schema = {
             "module_name" : module.module_name,
             "day_of_week" : timeslot.day,
             "time" : timeslot.start_time.isoformat(timespec='minutes') + ' - ' + timeslot.end_time.isoformat(timespec='minutes'),
-            "status" : get_session_status(timeslot.day, timeslot.start_time,timeslot.end_time, attendance.is_present),
+            "status" : get_session_status(timeslot.day, timeslot.start_time,timeslot.end_time, session.is_cancelled),
         }
         result.append(schema)
 
@@ -91,13 +102,16 @@ def format_timeslot_data(timeslots):
     result = merge_timeslots(tmp)
     return jsonify(result)
 
-def get_session_status(day, start_time, end_time, is_present):
+def get_session_status(day, start_time, end_time, is_cancelled):
+    if is_cancelled:
+        return "Cancelled"
+
     if get_date_of_day(day).replace(hour=start_time.hour, minute=start_time.minute, second=0, microsecond=0) <= datetime.datetime.now() <= get_date_of_day(day).replace(hour=end_time.hour, minute=end_time.minute, second=0, microsecond=0):
         return "Ongoing"
     elif get_date_of_day(day).replace(hour=start_time.hour, minute=start_time.minute, second=0, microsecond=0) >= datetime.datetime.now():
         return "Upcoming"
-    elif is_present:
-        return "Present" if is_present == True else "Absent"
+    else:
+        return "Ended"
 
 def get_semester_period():
     if datetime.datetime(2023, 2, 1, 00, 0, 0, 000000) <= datetime.datetime.now() <= datetime.datetime(2023, 7, 14, 00, 0, 0, 000000):

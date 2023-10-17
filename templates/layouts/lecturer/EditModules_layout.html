@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+<div class="toast-container p-3 bottom-0 end-0" id="toast-area"></div>
 <div class="container-lg h-100">
     <div class="d-flex flex-row">
         <button role="button" class="btn bg-transparent rounded border border-0" data-bs-toggle="modal"
@@ -28,14 +29,14 @@
         <div class="d-flex flex-column">
             <div class="mb-3">
                 <label for="moduleCode_field" class="form-label">Module code</label>
-                <input type="text" class="form-control" id="moduleCode_field">
+                <p class="fs-3 fw-medium">{{ module.code }}</p>
             </div>
             <div class="mb-3">
                 <label for="moduleName_field" class="form-label">Module name</label>
-                <input type="text" class="form-control" id="moduleName_field">
+                <p class="fs-3 fw-medium">{{ module.name }}</p>
             </div>
         </div>
-        <timetracker ref="tt" :initial-data="initialData"></timetracker>
+        <timetracker ref="tt" :module="selectedModule"></timetracker>
         <div class="d-flex justify-content-center mt-4">
             <button role="button" id="save-module-edit"
                 class="btn bg-transparent rounded border border-1 d-flex align-items-center justify-content-center">
@@ -63,65 +64,38 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="staticSavedSuccess" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Success</h1>
-            </div>
-            <div class="modal-body">
-                Updated successfully! 🤙
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="modal-yayi">Yayi!</button>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block script %}
 <script src="/static/custom.js" type="text/javascript"></script>
 <script>
     const saveEdit = document.getElementById("save-module-edit");
-    const moduleName = document.getElementById("moduleName_field");
-    const moduleCode = document.getElementById("moduleCode_field");
-    const modalYayi = document.getElementById("modal-yayi");
     const timetrackerComponent = app._instance.refs.tt;
 
-    moduleName.addEventListener('change', () => moduleName.classList.remove("border", "border-1", "border-danger"));
-    moduleCode.addEventListener('change', () => moduleCode.classList.remove("border", "border-1", "border-danger"));
-
     saveEdit.addEventListener('click', () => {
-        console.log(moduleName.value);
-        if (!moduleCode.value) {
-            moduleCode.focus();
-            moduleCode.classList.add("border", "border-1", "border-danger");
-        }
-
-        if (!moduleName.value) {
-            if (moduleCode.value) moduleName.focus();
-            return moduleName.classList.add("border", "border-1", "border-danger");
-        }
-
         if (!timetrackerComponent.isAllFieldsValid())
             return;
 
         const formattedSlots = timetrackerComponent.formatTimeslots();
-        const data = { module_code: moduleCode.value, module_name: moduleName.value, timeslots: formattedSlots };
+        const data = { timeslots: formattedSlots };
         console.log(JSON.stringify(data));
-
-        console.log("Saved!");
-        saveEdit.setAttribute("data-bs-toggle", "modal");
-        saveEdit.setAttribute("data-bs-target", "#staticSavedSuccess");
-        saveEdit.click();
-    });
-
-    modalYayi.addEventListener('click', () => {
-        saveEdit.removeAttribute("data-bs-toggle");
-        saveEdit.removeAttribute("data-bs-target");
         return window.location.assign('/lecturer/manage');
     });
+
+    const appendAlert = (message, type) => {
+        const wrapper = document.querySelector("div#toast-area");
+        wrapper.innerHTML = [
+            `<div class="toast align-items-center bg-${type} text-white position-relative border-0"
+                role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+            </div>`
+        ].join('');
+    }
 </script>
 {% endblock %}

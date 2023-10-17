@@ -29,7 +29,7 @@
                 Still Active
             </p>
             <div class="table-responsive p-0 h-100">
-                {{ table.self(qr_data) }}
+                {{ table.self(active_qrs_data, datetime) }}
             </div>
         </div>
         <div class="container">
@@ -37,7 +37,7 @@
                 Expired
             </p>
             <div class="table-responsive p-0 h-100">
-                {{ table.self(qr_data,1) }}
+                {{ table.self(expired_qrs_data, datetime, 1) }}
             </div>
         </div>
     </div>

@@ -2,6 +2,7 @@ from flask import render_template, redirect, url_for, request
 from flask_security.decorators import permissions_required,roles_required
 from controllers import api_controller as apic
 import json
+from datetime import datetime
 
 @roles_required('lecturer')
 def viewByAllAttendance():
@@ -19,8 +20,9 @@ def viewByStudentAttendance():
 
 @roles_required('lecturer')
 def activeQR():
-    qr_data = json.loads(apic.send_all_qr_data().data)
-    return render_template('layouts/lecturer/ActiveQR_layout.html', qr_data=qr_data)
+    active_qrs_data, expired_qrs_data = apic.send_all_qr_data()
+    print(active_qrs_data, expired_qrs_data)
+    return render_template('layouts/lecturer/ActiveQR_layout.html', expired_qrs_data=json.loads(expired_qrs_data.data), active_qrs_data=json.loads(active_qrs_data.data), datetime=datetime)
 
 @roles_required('lecturer')
 def generateQR():
@@ -44,9 +46,11 @@ def manage():
     return render_template('layouts/lecturer/Manage_layout.html', modules=module_data)
 
 @roles_required('lecturer')
-def edit_module(module_id):
-    
-    return render_template('layouts/lecturer/EditModules_layout.html')
+def edit_module():
+    module_code = request.args['module']
+    module = json.loads(apic.send_module(module_code).data)
+
+    return render_template('layouts/lecturer/EditModules_layout.html', module=module)
 
 @roles_required('lecturer')
 def add_module():

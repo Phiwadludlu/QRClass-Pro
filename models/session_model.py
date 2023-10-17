@@ -1,7 +1,7 @@
 from models import db
 from datetime import datetime
 
-from sqlalchemy import Column,Integer,String,Date,Time,DateTime,ForeignKey
+from sqlalchemy import Column,Integer,String,Date,Boolean,DateTime,ForeignKey
 
 class ModuleSession (db.Model):
 
@@ -10,6 +10,7 @@ class ModuleSession (db.Model):
 
     id = Column(Integer(), primary_key=True)
     date = Column(Date(), nullable=False)
+    is_cancelled = Column(Boolean, default=False)
     created_at = Column(DateTime(), nullable=False, default=datetime.now())
     modified_at = Column(DateTime(), default= datetime.now())
     module_id = Column(Integer(), ForeignKey("modules.id"))

@@ -15,6 +15,7 @@ from routes.student_route import student_route
 from routes.lecturer_route import lecturer_route
 
 from controllers import core_controller as cl
+from services.cron_jobs import run_jobs
 
 def create_app():
     app = Flask(__name__)
@@ -57,3 +58,4 @@ app.register_blueprint(lecturer_route, url_prefix='/lecturer/')
 
 if __name__ == '__main__':
     app.run(debug=True)
+    run_jobs() # "schedule" jobs responsible for auto creating session, and marking absent students once a day at 02:00 and 18:00 respectively

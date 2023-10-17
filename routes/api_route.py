@@ -9,6 +9,7 @@ api = Blueprint("api_routes",__name__)
 
 api.get("/qualification/all")(apic.send_all_qualifications)
 api.get("/module/all")(apic.send_all_modules)
+api.get("/module/<int:module_id>")(apic.send_module)
 api.get("/attendance/all")(apic.send_all_attendance)
 api.get("/timeslots/all")(apic.send_all_timeslot)
 api.post("/timeslots/module")(apic.send_timeslots_by_module)

@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block content %}
+<div class="toast-container p-3 bottom-0 end-0" id="toast-area"></div>
 <div class="container-lg h-100">
-    <div id="alert-section"></div>
     <div class="d-flex flex-row">
         <a href="/student/" role="button" class="btn bg-transparent rounded border border-0">
             <span class="material-symbols-outlined">
@@ -30,9 +30,9 @@
             <div id="qr-result"></div>
         </div>
         <div class="d-flex flex-column justify-content-center overflow-x-hidden">
-            <video id="video" style="width:250px;height:250px; object-fit: cover;"></video>
+            <video id="video-feed" width="250" height="250" style="object-fit: cover;"></video>
         </div>
-        <div class="d-flex justify-content-center"><button type="button" onclick="()=>scanQRCode({{ student_number }})"
+        <div class="d-flex justify-content-center"><button type="button" id="scan-btn"
                 class="btn justify-content-center d-flex align-items-center btn-outline-secondary">Scan
                 <span class="material-symbols-outlined"> photo_camera </span></button>
         </div>
@@ -46,106 +46,130 @@
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.0.0/dist/jsQR.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const videoElement = document.getElementById("video");
-        const qrResult = document.getElementById("qr-result");
+    const scanBTN = document.querySelector("button#scan-btn");
+    const videoElement = document.querySelector("video#video-feed");
+    const qrResult = document.getElementById("qr-result");
 
-        // Function to start the camera stream
-        function startCamera() {
-            navigator.mediaDevices
-                .getUserMedia({ video: { facingMode: "environment" } }) // Use the rear-facing camera
-                .then(function (stream) {
-                    videoElement.srcObject = stream;
-                    videoElement.play();
-                    scanQRCode();
-                })
-                .catch(function (error) {
-                    console.error("Error accessing the camera:", error);
-                });
+    // Function to start the camera stream
+    function startCamera() {
+        console.log(videoElement);
+        window.$dev = videoElement;
+        navigator.mediaDevices
+            .getUserMedia({ video: { facingMode: "environment" } }) // Use the rear-facing camera
+            .then(function (stream) {
+                videoElement.srcObject = stream;
+                videoElement.play();
+            })
+            .catch(function (error) {
+                console.error("Error accessing the camera:", error);
+            });
+    }
+
+    function destructure_QR_text(inputString) {
+        var keyValuePairs = inputString.split('&');
+        var result = {};
+
+        for (var i = 0; i < keyValuePairs.length; i++) {
+            var pair = keyValuePairs[i].split('=');
+            var key = pair[0];
+            var value = pair[1];
+
+            result[key] = value;
         }
 
-        function destructure_QR_text(inputString) {
-            var keyValuePairs = inputString.split('&');
-            var result = {};
+        return result;
+    }
 
-            for (var i = 0; i < keyValuePairs.length; i++) {
-                var pair = keyValuePairs[i].split('=');
-                var key = pair[0];
-                var value = pair[1];
+    const appendAlert = (message, type) => {
+        const wrapper = document.querySelector("div#toast-area");
+        wrapper.innerHTML = [
+            `<div class="toast align-items-center bg-${type} text-white position-relative border-0"
+                role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+            </div>`
+        ].join('');
+    }
 
-                // You can convert the value to a number if it's numeric
-                if (!isNaN(value)) {
-                    value = parseInt(value, 10);
+    async function sendQrData(data) {
+        const { uuid, session } = destructure_QR_text(data);
+        console.log(uuid, session);
+
+        const response = await fetch('/api/v1/qr/verify', {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                uuid,
+                session
+            })
+        });
+
+        result = await response.json();
+
+        return result;
+    }
+
+    // Function to continuously scan for QR codes
+    function scanQRCode() {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        const videoWidth = videoElement.width;
+        const videoHeight = videoElement.height;
+        canvas.width = videoWidth;
+        canvas.height = videoHeight;
+
+        let timeoutId;
+
+        const scanFrame = async () => {
+            context.drawImage(videoElement, 0, 0, videoWidth, videoHeight);
+            const imageData = context.getImageData(0, 0, videoWidth, videoHeight);
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+            qrResult.innerHTML = '';
+
+            if (code) {
+                const result = await sendQrData(code.data);
+                console.log(result);
+
+                if (result.code === -4) {
+                    appendAlert('Something went wrong. Please try again later.', 'danger');
+                } else if (result.code === -3) {
+                    appendAlert('This qr code has expired.', 'danger');
+                } else if (result.code === -2) {
+                    appendAlert('Invalid uuid.', 'danger');
+                } else if (result.code === -1) {
+                    appendAlert('You do not do this module.', 'warning');
+                } else if (result.code === 0) {
+                    appendAlert('Attendance has been logged already!', 'info');
+                } else if (result.code === 1) {
+                    appendAlert('Successfully logged attendance!', 'success');
                 }
-
-                result[key] = value;
+            } else {
+                appendAlert('Not a valid qr code.', 'warning');
             }
+            const toastItem = document.querySelector("div.toast");
+            if (toastItem) {
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastItem);
+                toastBootstrap.show()
+            }
+        };
 
-            return result;
-        }
+        requestAnimationFrame(scanFrame);
+    }
 
-        const appendAlert = (message, type) => {
-            const wrapper = document.createElement('div')
-            wrapper.innerHTML = [
-                `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-                `   <div>${message}</div>`,
-                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-                '</div>'
-            ].join('')
-            qrResult.append(wrapper);
-        }
-
-        // Function to continuously scan for QR codes
-        function scanQRCode(student_number) {
-            const canvas = document.createElement("canvas");
-            const context = canvas.getContext("2d");
-            const videoWidth = videoElement.videoWidth;
-            const videoHeight = videoElement.videoHeight;
-            canvas.width = videoWidth;
-            canvas.height = videoHeight;
-
-            let timeoutId;
-
-            const scanFrame = async (stud_num) => {
-                context.drawImage(videoElement, 0, 0, videoWidth, videoHeight);
-                const imageData = context.getImageData(0, 0, videoWidth, videoHeight);
-                const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-                qrResult.innerHTML = '';
-
-                if (code) {
-                    const response = await fetch('/api/v1/qr/verify', {
-                        mode: 'cors',
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            student_number : stud_num,
-                            ...destructure_QR_text(code.data)
-                        })
-                    }); 
-
-                    const result = response.json();
-                    console.log(result);
-
-                    if (result.success === 1) {
-                        appendAlert('Successfully logged attendance!', 'success');
-                    } else {
-                        appendAlert('Invalid uuid.', 'danger');
-                    }
-                } else {
-                    appendAlert(`Invalid QR code. ${code}`, 'warning');
-                }
-            };
-
-            requestAnimationFrame(scanFrame(student_number));
-        }
-
-
-        // Start the camera when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
         startCamera();
-
+    });
+    scanBTN.addEventListener("click", () => {
+        scanQRCode();
     });
 </script>
 
