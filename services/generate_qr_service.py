@@ -49,35 +49,38 @@ def generate_qr_code():
     
 
 def verify_qr_code():
+    success = None
     try:
         data = request.data
         unloaded = json.loads(data)
         qr_uuid = unloaded['uuid']
         session_uuid = unloaded['session']
+        
         query = QR.query.filter( QR.url_uuid == qr_uuid ).first()
-        if query.id:
+        if query:
             qr_id = query.id
             if query.expiration_date < datetime.now():
                 session = ModuleSession.query.filter( ModuleSession.qr_id == qr_id).first()
                 if session.session_uuid == session_uuid:
-                    student_does_module = db.session.query(Student, StudentRegister).filter( and_(Student.student_number == current_user.student.student_number, session.module_id == StudentRegister.module_id)).first()
+                    student_does_module = db.session.query(StudentRegister).filter( and_(StudentRegister.student_id == current_user.student.id, session.module_id == StudentRegister.module_id)).first()
                     if student_does_module:
                         has_logged = db.session.query(Attendance).filter(and_(Attendance.student_id == current_user.student.id, session.id == Attendance.session_id)).first()
                         if not has_logged:
                             log = Attendance(is_present=True, student_id=current_user.student.id, session_id=session.id)
                             db.session.add(log)
                             db.session.commit()
-                            return jsonify({"success" : 1}) # success
+                            success=1 # success
                         else:
-                            return jsonify({"success" : 0}) # already logged attendance
+                            success=0 # already logged attendance
                     else:
-                        return jsonify({"success" : -1}) # student does not do module
+                        success=-1 # student does not do module
                 else:
-                    return jsonify({"success" : -2}) # invalid uuid
+                    success=-2 # invalid uuid
             else:
-                return jsonify({"success" : -3}) # expired qr
+                success=-3 # expired qr
         else:
-            return jsonify({"success" : -4}) # server error
+            success=-4 # server errors
+        return jsonify({"code" : success}) 
     except:
-        return jsonify({"success" : -4}) # server error
+        return jsonify({"code" : -4}) # server error
 

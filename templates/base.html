@@ -43,21 +43,20 @@
     </template>
     <template id="multiselect-template">
         <div class="dropdown">
-            <div class="form-control d-flex align-items-center w-100" data-bs-toggle="dropdown"
-                data-bs-auto-close="inside" aria-expanded="false" :class="{ 'bg-body-secondary' : isDropdownDisabled }"
-                :disabled="isDropdownDisabled">
+            <div class="form-control d-flex align-items-center w-100"
+                :class="{ 'bg-body-secondary' : isDropdownDisabled }" :disabled="isDropdownDisabled">
                 <span class="material-symbols-outlined" style="pointer-events: none;">search</span>
                 <input type="text" class="form-control border border-0 shadow-none" :id="searchFieldId"
                     placeholder="Search" @change="(e) => fetchSearch(e.target.value)" :disabled="isDropdownDisabled" />
             </div>
-            <div class="dropdown-menu w-100">
-                <ul class="list-group list-group-flush" :id="dropdownId">
+            <div class="dropdown-menu w-100" :class="{ 'show' : isDropdownOpen }">
+                <ul class="list-group list-group-flush" :id="dropdownId" v-if="isDropdownOpen">
                     <li v-for="(item, index) in filteredItems" :key="index" class="list-group-item"
                         v-if="filteredItems.length>0">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" :type="checkboxType" :value="item.code" :id="item.id"
                                 @click="handleDropdownClick(item.code)" v-model="currentTags">
-                            <label :for="item.id" class="form-check-label stretched-link">{{ '{{item.code}}' }} | {{
+                            <label :for="item.id" class="form-check-label stretched-link">{{ '{{item.code}}' }}  {{
                                 '{{item.name}}' }}</label>
                         </div>
                     </li>
@@ -105,7 +104,7 @@
                         </td>
                         <td colspan="2">
                             <input type="text" class="form-control" v-model="row.times" style="min-width: 155px;"
-                                :class="{ 'border-danger': !areTimesValid(index), 'border-success': areTimesValid(index)}"/>
+                                :class="{ 'border-danger': !areTimesValid(index), 'border-success': areTimesValid(index)}" />
                             <div class="form-text">{{'{{ getTimesValidationTitle(index) }}'}}</div>
                         </td>
                         <td style="width: 40px;">

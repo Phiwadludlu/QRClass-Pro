@@ -15,6 +15,9 @@ from flask_security.decorators import anonymous_user_required, auth_required
 from models import db
 from models.auth_models.user_model import User
 
+from services.populate_moduletable import run as m_run
+from services.populate_qualificationtable import run as p_run
+
 #Form Imports
 from forms.auth_forms.sign_up_form import StudentSignUp,LecturerSignUp, StudentRegisterForm, LecturerRegisterForm
 
@@ -32,6 +35,12 @@ def create_tables():
 
     services.create_tables()
     
+    return "Done", 200
+
+def populate_tables():
+    m_run()
+    p_run()
+
     return "Done", 200
 
 

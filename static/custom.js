@@ -5,11 +5,15 @@ const app = Vue.createApp({
             moduleItems: [], // Initialize with the expected data structure
             qualificationItems: [],
             selectedModule: '',
+            isDropdownOpen: false,
         };
     },
     methods: {
         updateSelectedModule(newVal) {
             this.selectedModule = newVal;
+        },
+        updateOpenDropdown(newVal) {
+            this.isDropdownOpen = newVal;
         },
         async fetchModuleItems() {
             try {
@@ -75,6 +79,10 @@ app.component('multiselect', {
         returnType: String,
         items: Array,
         checkboxType: String,
+        isDropdownOpen : {
+            type : Boolean,
+            default: false,
+        }
     },
     data() {
         return {
@@ -96,6 +104,11 @@ app.component('multiselect', {
     methods: {
         fetchSearch(value) {
             this.searchText = value;
+            if (this.searchText) {
+                this.$emit('open-dropdown', true);
+            } else {
+                this.$emit('open-dropdown', false);
+            }
         },
         debounceInput(id) {
             let timeoutId;
@@ -179,6 +192,8 @@ app.component('multiselect', {
                 }
             }
             this.$emit('selected-module', this.currentTags[0]);
+            this.$emit('open-dropdown', false);
+            this.searchText = this.currentTags[0];
         },
         handleTagClick(tag) {
             // Remove the clicked tag from currentTags

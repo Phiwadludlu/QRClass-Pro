@@ -38,7 +38,8 @@
             <p class="fs-5 fw-lighter">Module</p>
             <multiselect ref="ms" :search-field-id="'multiselect-searchfield'" :dropdown-id="'dropdown-items'"
                 :items="moduleItems" :checkbox-type="'checkbox'" :limit="1" :return-type="'module-selection'"
-                :action="'module-filter'" @selected-module="updateSelectedModule"></multiselect>
+                :action="'module-filter'" @selected-module="updateSelectedModule" @open-dropdown="updateOpenDropdown"
+                :is-dropdown-open="isDropdownOpen"></multiselect>
         </div>
         <div class="row">
             <p class="fs-5 fw-lighter mb-0">Session</p>
@@ -188,7 +189,7 @@
             }).then(result => result.json());
 
             if (res.success === 1) {
-                window.location.assign(`./share?img=${btoa(res.img)}`)
+                window.location.assign(`./share?img=${btoa(encodeURIComponent(res.img).replace(/%([0-9A-F]{2})/g, function (match, p1) { return String.fromCharCode('0x' + p1); }))}`)
             } else if (res.success === 0) {
                 appendAlert('Something went wrong. Try again later.', 'danger');
             }

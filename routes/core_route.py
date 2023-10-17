@@ -1,12 +1,12 @@
 from flask import Blueprint
-from controllers.core_controller import index,create_tables,login, signUp, lecturer_sign_up, student_sign_up, proxy_redirect, add_dummy_data
+from controllers.core_controller import index,create_tables,login, signUp, lecturer_sign_up, student_sign_up, proxy_redirect, populate_tables
 
 core_route = Blueprint('core_routes',__name__)
 
 core_route.get("/") (index)
 
 core_route.get("/create-tables")(create_tables)
-core_route.get("/add_dummy_data")(add_dummy_data)
+core_route.get("/populate_tables")(populate_tables)
 
 core_route.route("/register",methods=["GET","POST"]) (signUp)
 core_route.route("/register/lecturer", methods=['GET','POST'])(lecturer_sign_up)

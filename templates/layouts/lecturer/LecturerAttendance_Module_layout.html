@@ -41,7 +41,7 @@
             You want to see the attendance of which module?
         </p>
         <multiselect :search-field-id="'multiselect-searchfield'" :dropdown-id="'dropdown-items'" :items="moduleItems"
-            :checkbox-type="'checkbox'" :limit="1" :return-type="'module-table'" :action="'module-filter'"></multiselect>
+            :checkbox-type="'checkbox'" :limit="1" :return-type="'module-table'" :action="'module-filter'" @open-dropdown="updateOpenDropdown" :is-dropdown-open="isDropdownOpen"></multiselect>
         <div class="table-responsive h-100" id="table-area"></div>
     </div>
 </div>

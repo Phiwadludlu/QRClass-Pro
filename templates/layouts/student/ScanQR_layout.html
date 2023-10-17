@@ -135,26 +135,31 @@
 
             qrResult.innerHTML = '';
 
-            if (code) {
-                const result = await sendQrData(code.data);
-                console.log(result);
+            const result = await sendQrData(code.data);
 
-                if (result.code === -4) {
+            switch (result.code) {
+                case -4:
                     appendAlert('Something went wrong. Please try again later.', 'danger');
-                } else if (result.code === -3) {
+                    break;
+                case -3:
                     appendAlert('This qr code has expired.', 'danger');
-                } else if (result.code === -2) {
+                    break;
+                case -2:
                     appendAlert('Invalid uuid.', 'danger');
-                } else if (result.code === -1) {
+                    break;
+                case -1:
                     appendAlert('You do not do this module.', 'warning');
-                } else if (result.code === 0) {
+                    break;
+                case 0:
                     appendAlert('Attendance has been logged already!', 'info');
-                } else if (result.code === 1) {
+                    break;
+                case 1:
                     appendAlert('Successfully logged attendance!', 'success');
-                }
-            } else {
-                appendAlert('Not a valid qr code.', 'warning');
+                    break;
+                default:
+                    appendAlert(`Not a valid qr code. ${result.code}`, 'warning');
             }
+
             const toastItem = document.querySelector("div.toast");
             if (toastItem) {
                 const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastItem);
