@@ -4,8 +4,6 @@ from flask import request, jsonify
 import json
 import uuid
 from datetime import datetime
-import qrcode
-import qrcode.image.svg
 from sqlalchemy import and_
 from flask_login import current_user
 
@@ -18,15 +16,15 @@ def generate_qr_code():
         expiration_date = unloaded['expiration_date']
 
         url_unique_identifier = str(uuid.uuid1())
+        session_unique_identifier = str(uuid.uuid1())
         module = Module.query.filter(Module.module_code == module_code).first()
         timeslot = TimeSlot.query.filter(TimeSlot.id == timeslot_id).first()
-        session = ModuleSession.query.filter(and_(ModuleSession.module_id == module.id, ModuleSession.timeslot_id == timeslot.id)).first()
 
-        new_session = ModuleSession(date=datetime.now().date(), module_id = module.id, timeslot_id=timeslot.id)
+        new_session = ModuleSession(date=datetime.now().date(), module_id = module.id, timeslot_id=timeslot.id, session_uuid=session_unique_identifier)
         db.session.add(new_session)
         db.session.flush()
         
-        qr_url = "uuid=%s&session=%s" % (url_unique_identifier, session.session_uuid)
+        qr_url = "uuid=%s&session=%s" % (url_unique_identifier, session_unique_identifier)
         new_qr = QR(expiration_date=datetime.fromisoformat(expiration_date),url_uuid=url_unique_identifier)
         new_qr.qr_url = qr_url
         db.session.add(new_qr)
@@ -36,14 +34,8 @@ def generate_qr_code():
         db.session.add(new_session)
 
         db.session.commit()
-        
-        qr = qrcode.QRCode(image_factory=qrcode.image.svg.SvgPathImage)
-        qr.add_data(qr_url)
-        qr.make(fit=True)
 
-        img = qr.make_image(fill_color="black", back_color="white")
-
-        return jsonify({ "success" : 1, 'img' : img.to_string(encoding='unicode')})
+        return jsonify({ "success" : 1, 'session_uuid' : session_unique_identifier})
     except:
         return jsonify({ "success" : 0})
     
@@ -59,8 +51,8 @@ def verify_qr_code():
         query = QR.query.filter( QR.url_uuid == qr_uuid ).first()
         if query:
             qr_id = query.id
-            if query.expiration_date < datetime.now():
-                session = ModuleSession.query.filter( ModuleSession.qr_id == qr_id).first()
+            if query.expiration_date >= datetime.now():
+                session = db.session.query(ModuleSession).filter( ModuleSession.qr_id == qr_id).first()
                 if session.session_uuid == session_uuid:
                     student_does_module = db.session.query(StudentRegister).filter( and_(StudentRegister.student_id == current_user.student.id, session.module_id == StudentRegister.module_id)).first()
                     if student_does_module:

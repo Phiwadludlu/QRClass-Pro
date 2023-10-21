@@ -189,7 +189,7 @@
             }).then(result => result.json());
 
             if (res.success === 1) {
-                window.location.assign(`./share?img=${btoa(encodeURIComponent(res.img).replace(/%([0-9A-F]{2})/g, function (match, p1) { return String.fromCharCode('0x' + p1); }))}`)
+                window.location.assign(`./share?session=${res.session_uuid}`)
             } else if (res.success === 0) {
                 appendAlert('Something went wrong. Try again later.', 'danger');
             }

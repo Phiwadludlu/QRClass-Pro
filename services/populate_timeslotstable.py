@@ -2,7 +2,6 @@ from models import db, TimeSlot, ModuleSession
 import random
 from datetime import datetime, timedelta
 from sqlalchemy import and_
-from services.cron_jobs import session_creation
 
 # Lower and upper limits for start and end times
 lower_limit = datetime.strptime("08:00:00", "%H:%M:%S")
@@ -32,5 +31,3 @@ def run(all_modules):
                 db.session.add(new_timeslot)
 
     db.session.commit()
-    # will create session for timeslots that are happening today
-    session_creation()

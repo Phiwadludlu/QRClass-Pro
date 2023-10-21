@@ -19,8 +19,10 @@
             <td>{{ item.expiration_time }}</td>
             <td>{{ item.module_name }}</td>
             <td>{{ item.session }}</td>
-            {% if not datetime.fromisoformat(item.expiration_date) > datetime.now() %}
-            <td>{{ item.qr_url }}</td>
+            {% if expired==0 %}
+            <td>
+                <a href='/lecturer/qr/share?session={{ item.session_uuid}}'>show</a>
+            </td>
             {% endif %}
         </tr>
         {% endfor %}

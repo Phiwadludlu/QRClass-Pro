@@ -38,14 +38,12 @@ def get_qr_query():
     return qr_query
 
 def get_timetable_query():
-    timetable_query = db.session.query(Student, StudentRegister, Module, TimeSlot, Attendance, ModuleSession)\
+    timetable_query = db.session.query(StudentRegister, Module, TimeSlot)\
         .filter(
             and_(
-                Student.id == StudentRegister.student_id, 
+                current_user.student.id == StudentRegister.student_id, 
                 Module.id == StudentRegister.module_id, 
-                TimeSlot.module_id == Module.id, 
-                Attendance.student_id == Student.id, 
-                ModuleSession.timeslot_id == TimeSlot.id
+                TimeSlot.module_id == Module.id,
             )
         )
 

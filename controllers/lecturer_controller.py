@@ -3,6 +3,10 @@ from flask_security.decorators import permissions_required,roles_required
 from controllers import api_controller as apic
 import json
 from datetime import datetime
+import base64
+import qrcode
+import qrcode.image.svg
+from models import db, ModuleSession
 
 @roles_required('lecturer')
 def viewByAllAttendance():
@@ -30,9 +34,18 @@ def generateQR():
 
 @roles_required('lecturer')
 def showGeneratedQR():
-    img_data = request.args['img']
-    if img_data:
-        return render_template('layouts/lecturer/QRGenerated_layout.html', img_data=img_data)
+    session_uuid = request.args['session']
+    
+    session = db.session.query(ModuleSession).filter(ModuleSession.session_uuid == session_uuid).first()
+
+    qr = qrcode.QRCode(image_factory=qrcode.image.svg.SvgPathImage)
+    qr.add_data(session.qr.qr_url)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+
+    if session_uuid:
+        return render_template('layouts/lecturer/QRGenerated_layout.html', img_data=base64.b64encode(img.to_string(encoding="utf-8")).decode())
     else:
         return redirect(url_for('not_found'))
 

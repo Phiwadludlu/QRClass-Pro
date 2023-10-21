@@ -1,10 +1,9 @@
-from models import db, TimeSlot, ModuleSession, QR, StudentRegister, Attendance
+from models import db, ModuleSession, QR, StudentRegister, Attendance
 import schedule
 import time
 from pytz import timezone
 from datetime import datetime
 from sqlalchemy import and_
-import uuid
 from services import api_services as api_s
 
 
@@ -24,19 +23,8 @@ def make_absent_attendance():
                         db.session.add(new_attendance)
     
     db.session.commit()
-        
-
-def session_creation():
-    timeslots = db.session.query(TimeSlot).filter( TimeSlot.day == datetime.now().strftime("%A")).all()
-
-    for slot in timeslots:
-        new_session = ModuleSession(date=datetime.now().date(),module_id=slot.module_id,timeslot_id=slot.id,session_uuid=str(uuid.uuid1()))
-        db.session.add(new_session)
-
-    db.session.commit()
 
 schedule.every().day.at("18:00", timezone("Africa/Johannesburg")).do(make_absent_attendance)
-schedule.every().day.at("02:00", timezone("Africa/Johannesburg")).do(session_creation)
 
 def run_jobs():
     while True:

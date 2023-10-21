@@ -1,5 +1,8 @@
 from flask import jsonify
 import datetime
+import base64
+import qrcode
+import qrcode.image.svg
 
 def format_attendance_query(data):
     result = []
@@ -57,13 +60,18 @@ def format_qualification_query(data):
 def format_qr_query(data):
     result = []
     for item in data:
-        module, qr, timeslot, _ = item
+        module, qr, timeslot, session = item
+        qr_obj = qrcode.QRCode(image_factory=qrcode.image.svg.SvgPathImage)
+        qr_obj.add_data(qr.qr_url)
+        qr_obj.make(fit=True)
+        img = qr_obj.make_image(fill_color="black", back_color="white")
+
         schema = {
             "module_name" : module.module_name,
             "session" : timeslot.start_time.isoformat(timespec='minutes') + ' - ' + timeslot.end_time.isoformat(timespec='minutes'),
             "expiration_date" : qr.expiration_date.date().isoformat(),
             "expiration_time" : qr.expiration_date.time().isoformat(timespec='minutes'),
-            "qr_url" : qr.qr_url,
+            "session_uuid" : session.session_uuid,
         }
         result.append(schema)
 
@@ -72,12 +80,12 @@ def format_qr_query(data):
 def format_timetable_query(data):
     result = []
     for item in data:
-        _, _, module, timeslot, _, session = item
+        _, module, timeslot = item
         schema = {
             "module_name" : module.module_name,
             "day_of_week" : timeslot.day,
             "time" : timeslot.start_time.isoformat(timespec='minutes') + ' - ' + timeslot.end_time.isoformat(timespec='minutes'),
-            "status" : get_session_status(timeslot.day, timeslot.start_time,timeslot.end_time, session.is_cancelled),
+            "status" : get_session_status(timeslot.day, timeslot.start_time,timeslot.end_time),
         }
         result.append(schema)
 
@@ -102,10 +110,7 @@ def format_timeslot_data(timeslots):
     result = merge_timeslots(tmp)
     return jsonify(result)
 
-def get_session_status(day, start_time, end_time, is_cancelled):
-    if is_cancelled:
-        return "Cancelled"
-
+def get_session_status(day, start_time, end_time):
     if get_date_of_day(day).replace(hour=start_time.hour, minute=start_time.minute, second=0, microsecond=0) <= datetime.datetime.now() <= get_date_of_day(day).replace(hour=end_time.hour, minute=end_time.minute, second=0, microsecond=0):
         return "Ongoing"
     elif get_date_of_day(day).replace(hour=start_time.hour, minute=start_time.minute, second=0, microsecond=0) >= datetime.datetime.now():
