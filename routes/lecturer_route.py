@@ -12,11 +12,11 @@ lecturer_route.get('/attendance/module') (le_controller.viewByModuleAttendance)
 lecturer_route.get('/attendance/student') (le_controller.viewByStudentAttendance)
 
 # cut out manage modules screen, too hard
-#lecturer_route.get('/manage') (le_controller.manage)
-#lecturer_route.get('/manage/') (le_controller.redirect_to_manage)
-#lecturer_route.get('/manage/edit') (le_controller.edit_module)
-#lecturer_route.get('/manage/add') (le_controller.add_module)
-#lecturer_route.get('/manage/remove/') (le_controller.redirect_to_manage)
+lecturer_route.get('/manage') (le_controller.manage)
+lecturer_route.get('/manage/') (le_controller.redirect_to_manage)
+lecturer_route.get('/manage/edit') (le_controller.edit_module)
+lecturer_route.get('/manage/add') (le_controller.add_module)
+lecturer_route.get('/manage/remove') (le_controller.remove_module)
 
 lecturer_route.get('/qr')(le_controller.activeQR)
 lecturer_route.get('/qr/') (le_controller.redirect_to_qr)

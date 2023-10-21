@@ -11,7 +11,7 @@
 <div class="container-lg h-100">
     <div id="alert-section"></div>
     <div class="d-flex flex-row">
-        <a href="/lecturer/manage" role="button" class="btn bg-transparent rounded border border-0">
+        <a href="/student/manage" role="button" class="btn bg-transparent rounded border border-0">
             <span class="material-symbols-outlined">
                 arrow_back_ios_new
             </span>
@@ -61,11 +61,11 @@
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({module_code : addingModule, type : "lecturer"})
+            body: JSON.stringify({module_code : addingModule, type : "student"})
         }).then(result => result.json());
 
         if (res.code == 1){
-            window.location.assign('/lecturer/manage');
+            window.location.assign('/student/manage');
         } else if (res.code == -1) {
             alert("Someone else already teaches this module.");
         } else {

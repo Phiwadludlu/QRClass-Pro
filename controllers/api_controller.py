@@ -1,8 +1,8 @@
 from flask import request, jsonify
-from models import db, Attendance, Student, ModuleSession, Module, Qualification, QR, TimeSlot, StudentRegister
+from models import db, Attendance, Student, ModuleSession, Module, Qualification, QR, TimeSlot, StudentRegister, Lecturer
 from services import api_services as api_s
 from datetime import datetime, timedelta
-from flask_security.decorators import roles_required
+from flask_security.decorators import auth_required
 from sqlalchemy import and_, or_
 import json
 from flask_login import current_user
@@ -38,10 +38,10 @@ def get_qr_query():
     return qr_query
 
 def get_timetable_query():
-    timetable_query = db.session.query(StudentRegister, Module, TimeSlot)\
+    timetable_query = db.session.query(Student, StudentRegister, Module, TimeSlot)\
         .filter(
             and_(
-                current_user.student.id == StudentRegister.student_id, 
+                Student.id == StudentRegister.student_id, 
                 Module.id == StudentRegister.module_id, 
                 TimeSlot.module_id == Module.id,
             )
@@ -99,6 +99,22 @@ def send_all_modules():
 
     return api_s.format_module_query(modules)
 
+def send_all_modules_by_lecturer(lecturer_staff_number):
+    lecturer = Lecturer.query.filter(Lecturer.staff_number == lecturer_staff_number).first()
+    modules = Module.query.filter(Module.lecturer_id == lecturer.id).all()
+
+    return api_s.format_module_query(modules)
+
+def send_all_modules_by_student(student_number):
+    stud = Student.query.filter(Student.student_number == student_number).first()
+    modules_reg = StudentRegister.query.filter(StudentRegister.student_id == stud.id).all()
+
+    m = [item.module_id for item in modules_reg]
+
+    modules = Module.query.filter(Module.id.in_(m)).all()
+
+    return api_s.format_module_query(modules)
+
 def send_all_qualifications():
     qualifications = Qualification.query.all()
 
@@ -113,39 +129,35 @@ def send_all_qr_data():
 
 def send_user_timetable(student_number):
     timetable_query = get_timetable_query()
+    print(timetable_query.all())
     timetable = timetable_query.filter(and_((StudentRegister.year == datetime.now().year), (StudentRegister.semester == api_s.get_semester_period()),(TimeSlot.day == datetime.now().strftime("%A")), (Student.student_number == student_number) )).all()
 
     return api_s.format_timetable_query(timetable)
 
-@roles_required('lecturer')
+@auth_required()
 def add_module():
     try:
         data = request.data
         unloaded = json.loads(data)
 
         module_code = unloaded['module_code']
-        module_name = unloaded['module_name']
-        timeslots = unloaded['timeslots']
+        print(module_code)
+        user_type = unloaded['type']
 
-        module_exists_by_code = db.session.query(Module).filter(str(Module.module_code).lower()==module_code.lower()).first()
-        module_exists_by_name = db.session.query(Module).filter(str(Module.module_code).lower()==module_code.lower()).first()
+        module_query = db.session.query(Module).filter(Module.module_code == module_code).first()
 
-        if (module_exists_by_code and module_exists_by_name) == False:
-            new_module = Module(module_name=module_name, module_code=module_code, lecturer_id=current_user.lecturer.id)
-            db.session.add(new_module)
-            db.session.flush()
+        if user_type == 'lecturer':
+            if module_query.lecturer_id == None:
+                module_query.lecturer_id = current_user.lecturer.id
+                db.session.add(module_query)
+            else:
+                return jsonify({'code' : -1}) # someone else already teaches this module
+        elif user_type == 'student':
+            new_reg = StudentRegister(student_id=current_user.student.id, module_id=module_query.id, year=datetime.now().year, semester=api_s.get_semester_period())
+            db.session.add(new_reg)
+            
+        db.session.commit()
 
-            for slot in timeslots:
-                for time in slot['times']:
-                    new_slot = TimeSlot(day=slot['day'],start_time=datetime.strptime(time.split("-")[0], '%H:%M').time(),end_time=datetime.strptime(time.split("-")[1], '%H:%M').time(), module_id=new_module.id)
-                    db.session.add(new_slot)
-                    new_slot = None
-
-        
-            db.session.commit()
-
-            return jsonify({'success' : 1}) # all is well
-        else:
-            return jsonify({'success' : -1}) # module with given code or given name already exists  
+        return jsonify({'code' : 1}) # all is well
     except:
-        return jsonify({'success' : -2}) # server error 
+        return jsonify({'code' : -2}) # server error 

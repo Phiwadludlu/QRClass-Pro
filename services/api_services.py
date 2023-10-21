@@ -80,7 +80,7 @@ def format_qr_query(data):
 def format_timetable_query(data):
     result = []
     for item in data:
-        _, module, timeslot = item
+        _, _, module, timeslot = item
         schema = {
             "module_name" : module.module_name,
             "day_of_week" : timeslot.day,

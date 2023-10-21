@@ -25,15 +25,20 @@
     </div>
     <div class="container-fluid mt-2">
         <div class="d-flex justify-content-center gap-2">
-            <a role="button" href="/lecturer/manage" class="btn bg-secondary text-light rounded-pill px-4">
+            <a role="button" href="/lecturer/manage" class="btn border border-2 bg-light text-secondary rounded-pill px-4">
                 All
             </a>
-            <a role="button" href="/lecturer/manage?lecturer={{ current_user.lecturer.staff_number }}" class="btn border border-2 bg-light text-secondary rounded-pill px-4">
+            <a role="button" href="/lecturer/manage?lecturer={{ current_user.lecturer.staff_number }}" class="btn bg-secondary text-light rounded-pill px-4">
                 My Modules
             </a>
         </div>
     </div>
     <div class="container-fluid mt-2">
+        <div class="d-flex flex-row justify-content-end">
+            <a role="button" href="manage/add"
+                class="btn d-flex align-items-center bg-light-subtle border border-1"><span
+                    class="material-symbols-outlined"> add </span> Add module</a>
+        </div>
         <div class="table-responsive h-100" id="table-area">
             {{ moduletable.self(modules, allow_edit) }}
         </div>

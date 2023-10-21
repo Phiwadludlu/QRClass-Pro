@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, jsonify
 from flask_security.decorators import permissions_required,roles_required
 from controllers import api_controller as apic
 import json
@@ -6,7 +6,8 @@ from datetime import datetime
 import base64
 import qrcode
 import qrcode.image.svg
-from models import db, ModuleSession
+from models import db, ModuleSession, Module
+from flask_login import current_user
 
 @roles_required('lecturer')
 def viewByAllAttendance():
@@ -55,8 +56,16 @@ def lecturerMain():
 
 @roles_required('lecturer')
 def manage():
-    module_data = json.loads(apic.send_all_modules().data)
-    return render_template('layouts/lecturer/Manage_layout.html', modules=module_data)
+    lecturer_staff_number = request.args.get('lecturer')
+
+    if lecturer_staff_number == None:
+        module_data = json.loads(apic.send_all_modules().data)
+        return render_template('layouts/lecturer/Manage_layout.html', modules=module_data, allow_edit=False)
+    elif lecturer_staff_number == current_user.lecturer.staff_number:
+        module_data = json.loads(apic.send_all_modules_by_lecturer(lecturer_staff_number).data)
+        return render_template('layouts/lecturer/ManageLecturer_layout.html', modules=module_data, allow_edit=True)
+    else:
+        return redirect('/lecturer/manage')
 
 @roles_required('lecturer')
 def edit_module():
@@ -71,11 +80,20 @@ def add_module():
     return render_template('layouts/lecturer/NewModule_layout.html')
 
 @roles_required('lecturer')
-def remove_module(module_id):
-    '''
-        It wont actually delete the module, will just un assign the lecturer teaching the module
-    '''
-    pass
+def remove_module():
+    module_code = request.args.get('module')
+
+    print(module_code)
+
+    if module_code:
+        module_query = db.session.query(Module).filter(Module.module_code == module_code).first()
+        if module_query:
+            if module_query.lecturer_id == current_user.lecturer.id:
+                module_query.lecturer_id = None
+                db.session.add(module_query)
+                db.session.commit()
+
+    return redirect('/lecturer/manage?lecturer=%s' % (current_user.lecturer.staff_number))
 
 @roles_required('lecturer')
 def redirect_to_attendence():
