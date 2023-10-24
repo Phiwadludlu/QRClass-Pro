@@ -353,7 +353,7 @@ app.component('sessionpicker', {
         async fetchTimeslots() {
             try {
                 // Replace with your actual API endpoint for moduleItems
-                const response = await fetch('http://127.0.0.1:5000/api/v1/timeslots/module', {
+                const response = await fetch('/api/v1/timeslots/module', {
                     mode: 'cors',
                     method: 'POST',
                     headers: {
@@ -426,7 +426,7 @@ app.component('timetracker', {
         async fetchTimeslots() {
             try {
                 // Replace with your actual API endpoint for moduleItems
-                const response = await fetch('http://127.0.0.1:5000/api/v1/timeslots/module', {
+                const response = await fetch('/api/v1/timeslots/module', {
                     mode: 'cors',
                     method: 'POST',
                     headers: {
