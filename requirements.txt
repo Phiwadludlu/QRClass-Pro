@@ -17,3 +17,5 @@ qrcode>=7.4.2
 pytz
 schedule
 pandas
+psycopg2
+gunicorn
