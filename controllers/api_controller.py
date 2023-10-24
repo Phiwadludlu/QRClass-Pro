@@ -74,7 +74,7 @@ def send_timeslots_by_module():
     module_query = Module.query.filter(Module.module_code == module_code).first()
     timeslots = TimeSlot.query.filter(module_query.id == TimeSlot.module_id).all()
 
-    return api_s.format_timeslot_data(timeslots)
+    return api_s.format_timeslot_module_data(timeslots)
 
 def send_attendance_by_module(module_code):
     attendance_query = get_attendance_query()

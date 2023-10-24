@@ -111,6 +111,25 @@ def format_timeslot_data(timeslots):
     result = merge_timeslots(tmp)
     return jsonify(result)
 
+def format_timeslot_module_data(timeslots):
+    tmp = []
+
+    for slot in timeslots:
+        schema = {
+            "day" : slot.day,
+            "timeslots" : {
+                "timeslot_id" : slot.id, 
+                "period" : {
+                    "start_time" : slot.start_time.isoformat(), 
+                    "end_time" : slot.end_time.isoformat()
+                }
+            }
+        }
+        tmp.append(schema)
+
+    result = merge_timeslots(tmp)
+    return jsonify(result)
+
 def get_session_status(day, start_time, end_time):
     if get_date_of_day(day).replace(hour=start_time.hour, minute=start_time.minute, second=0, microsecond=0) <= datetime.datetime.now() <= get_date_of_day(day).replace(hour=end_time.hour, minute=end_time.minute, second=0, microsecond=0):
         return "Ongoing"
