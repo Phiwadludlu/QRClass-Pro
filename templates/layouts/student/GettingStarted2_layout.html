@@ -16,8 +16,9 @@
       </div>
     </div>
     <div class="row mt-3">
-      <multiselect :search-field-id="'multiselect-searchfield'" :dropdown-id="'dropdown-items'" :items="moduleItems"
-        :checkbox-type="'checkbox'" :limit="5" :return-type="'none'" :action="'module-selection'"></multiselect>
+      <multiselect ref="ms" :search-field-id="'multiselect-searchfield'" :dropdown-id="'dropdown-items'"
+        :items="moduleItems" :checkbox-type="'checkbox'" :limit="5" :return-type="'none'" :action="'module-selection'"
+        @open-dropdown="updateOpenDropdown" :is-dropdown-open="isDropdownOpen"></multiselect>
       <div style="height: 25vh;"></div>
     </div>
   </div>

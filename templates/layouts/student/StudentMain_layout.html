@@ -11,14 +11,18 @@
         <p class="fs-2 fw-bold">Hello {{ current_user.student.student_number }} !</p>
     </div>
     <div class="row">
-        <p class="fs-6 fw-lighter text-secondary">Today's classes</p>
+        <p class="fs-2 fw-medium text-secondary">Today's classes</p>
     </div>
     <div class="container">
+        {% if timetable %}
         {% for item in timetable %}
         <div class="row mb-3">
             {{ tile.self(item.module_name, item.time, item.status) }}
         </div>
         {% endfor %}
+        {% else %}
+        <p class="fs-2 fw-medium text-secondary">No Classes.</p>
+        {% endif %}
     </div>
     <div class="row">
         <a href="attendance" class="d-flex align-items-center link-underline link-underline-opacity-0 text-dark">
