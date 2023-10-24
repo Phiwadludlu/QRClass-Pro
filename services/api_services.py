@@ -94,7 +94,8 @@ def format_timetable_query(data):
 def format_timeslot_data(timeslots):
     tmp = []
 
-    for slot in timeslots:
+    for item in timeslots:
+        _, slot = item
         schema = {
             "day" : slot.day,
             "timeslots" : {
