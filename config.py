@@ -10,7 +10,7 @@ FLASK_APP = "app"
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 #Database config 
-SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://qrcodepro_db_user:G4Z6Ro4W3XMLuXC6sPs9Xos7TUqLmthv@dpg-ckrokm81hnes7385pr90-a.oregon-postgres.render.com/qrcodepro_db'
+SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
 SQLALCHEMY_ENGINE_OPTIONS =  {
     "pool_pre_ping": True,
 }

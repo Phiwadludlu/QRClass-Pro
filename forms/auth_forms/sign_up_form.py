@@ -4,7 +4,7 @@ from wtforms import (EmailField, IntegerField, PasswordField, StringField,
                      validators)
 
 from models.auth_models.user_model import User
-from utils.authentication_utils import student_number_validator
+from utils.authentication_utils import student_number_validator, staff_number_validator
 
 
 class StudentSignUp (FlaskForm):
@@ -32,4 +32,4 @@ class StudentRegisterForm (RegisterForm):
 
 class LecturerRegisterForm (RegisterForm):
 
-    staff_number = StringField("Staff Number", validators=[validators.DataRequired(), validators.length(min=8, max=8, message="Student number is invalid"), student_number_validator ])
+    staff_number = StringField("Staff Number", validators=[validators.DataRequired(), validators.length(min=8, max=8, message="Student number is invalid"), staff_number_validator ])

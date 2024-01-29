@@ -97,9 +97,9 @@ def student_sign_up():
     register_student_form=StudentRegisterForm()
     
     if request.method=="POST":
+        
         if register_student_form.validate_on_submit():
-
-
+            
             student_role = Role.query.filter_by(id=2).first_or_404()
 
             #Add user to DB logic here
