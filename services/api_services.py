@@ -139,9 +139,9 @@ def get_session_status(day, start_time, end_time):
         return "Ended"
 
 def get_semester_period():
-    if datetime.datetime(2023, 2, 1, 00, 0, 0, 000000) <= datetime.datetime.now() <= datetime.datetime(2023, 7, 14, 00, 0, 0, 000000):
+    if datetime.datetime(2024, 2, 1, 00, 0, 0, 000000) <= datetime.datetime.now() <= datetime.datetime(2024, 7, 14, 00, 0, 0, 000000):
         return 1
-    elif datetime.datetime(2023, 7, 15, 00, 0, 0, 000000) <= datetime.datetime.now() <= datetime.datetime(2023, 12, 15, 00, 0, 0, 000000):
+    elif datetime.datetime(2024, 7, 15, 00, 0, 0, 000000) <= datetime.datetime.now() <= datetime.datetime(2024, 12, 15, 00, 0, 0, 000000):
         return 2
     
 def get_date_of_day(day_of_week):
